@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="@color/white"
+    android:clipChildren="false"
+    android:clipToPadding="false"> <!-- 부모 레이아웃에 clipChildren 속성 추가 -->
+
+    <!-- 전화번호 텍스트뷰, 회원가입 페이지의 텍스트 색상 사용 -->
+    <TextView
+        android:id="@+id/tv_phone_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Phone Number"
+        android:textSize="14sp"
+        android:textColor="@color/button_color"
+        android:padding="8dp" />
+
+    <!-- 신고 버튼과 건수 표시를 위한 FrameLayout -->
+    <Button
+        android:id="@+id/btn_report"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_primary"
+        android:padding="8dp"
+        android:text="신고"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+
+    <!-- 조회 버튼과 숫자 표시를 위한 FrameLayout -->
+    <FrameLayout
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:layout_marginStart="8dp">
+
+        <!-- 조회 버튼, 회원가입 페이지의 버튼 스타일 사용 -->
+        <Button
+            android:id="@+id/btn_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="조회"
+            android:textColor="@color/button_color"
+            android:background="@drawable/button_secondary"
+            android:padding="8dp"
+            android:textAllCaps="false" />
+
+        <!-- 조회 버튼 위에 표시될 숫자 -->
+        <TextView
+            android:id="@+id/tv_check_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:background="@drawable/bg_report_count"
+            android:padding="4dp"
+            android:text="5"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginEnd="-5dp"
+        android:layout_marginTop="-5dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        android:elevation="10dp" />
+    </FrameLayout>
+</LinearLayout>
