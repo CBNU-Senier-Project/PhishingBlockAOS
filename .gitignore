@@ -9,7 +9,7 @@
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
-/app/src/main/assets/key.json
+/app/src/main/assets/*.json
 /captures
 .externalNativeBuild
 .cxx
