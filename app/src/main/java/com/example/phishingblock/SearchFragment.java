@@ -28,7 +28,7 @@ public class SearchFragment extends Fragment {
     private EditText etSearch;
     private RecyclerView recyclerView;
     private PhoneNumberAdapter adapter;
-    private List<String> originalPhoneNumbers;  // 원본 리스트 유지
+    private List<String> originalPhoneNumbers;
 
     @Nullable
     @Override
@@ -43,11 +43,10 @@ public class SearchFragment extends Fragment {
         etSearch = view.findViewById(R.id.et_search);
         recyclerView = view.findViewById(R.id.recycler_view);
 
-        // MainActivity에서 PhoneNumberAdapter 가져오기
         MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             adapter = activity.getPhoneNumberAdapter();
-            originalPhoneNumbers = new ArrayList<>(adapter.phoneNumbers);  // 원본 리스트 복사
+            originalPhoneNumbers = new ArrayList<>(adapter.phoneNumbers);
             adapter.setOnItemClickListener(new PhoneNumberAdapter.OnItemClickListener() {
                 @Override
                 public void onReportClick(String phoneNumber) {
@@ -64,7 +63,6 @@ public class SearchFragment extends Fragment {
             recyclerView.setAdapter(adapter);
         }
 
-        // 키보드의 "Enter" 또는 "Search" 버튼 클릭 시 검색 수행
         etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -72,23 +70,19 @@ public class SearchFragment extends Fragment {
                         (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
                     String phoneNumber = etSearch.getText().toString().trim();
                     if (!phoneNumber.isEmpty()) {
-                        // 키보드 숨기기
                         hideKeyboard();
-                        // 전화번호 검색 처리
                         filterPhoneNumbers(phoneNumber);
                     }
-                    return true;  // 액션 처리 완료
+                    return true;
                 }
                 return false;
             }
         });
     }
 
-    // 전화번호 검색 및 필터링 처리
     private void filterPhoneNumbers(String query) {
         List<String> filteredList = new ArrayList<>();
 
-        // 검색어와 부분적으로 일치하는 전화번호 필터링
         for (String phoneNumber : originalPhoneNumbers) {
             if (phoneNumber.contains(query)) {
                 filteredList.add(phoneNumber);
@@ -96,27 +90,23 @@ public class SearchFragment extends Fragment {
         }
 
         if (filteredList.isEmpty()) {
-            // 검색된 번호가 없을 때 신고 확인 다이얼로그 표시
             showNoResultsDialog(query);
         } else {
-            // 검색된 번호가 있을 때는 필터링된 리스트를 어댑터에 설정
-            recyclerView.setVisibility(View.VISIBLE);  // 리스트 보이기
+            recyclerView.setVisibility(View.VISIBLE);
             adapter.updatePhoneNumbers(filteredList);
-            adapter.notifyDataSetChanged();  // RecyclerView 갱신
+            adapter.notifyDataSetChanged();
         }
     }
 
-    // 검색된 번호가 없을 때 신고 여부를 묻는 다이얼로그 표시
     private void showNoResultsDialog(String phoneNumber) {
         new AlertDialog.Builder(getContext())
                 .setTitle("검색된 번호가 없습니다.")
                 .setMessage("신고하시겠습니까?")
-                .setPositiveButton("확인", (dialog, which) -> showReportDialog(phoneNumber))  // 신고 작성 다이얼로그로 이동
+                .setPositiveButton("확인", (dialog, which) -> showReportDialog(phoneNumber))
                 .setNegativeButton("취소", null)
                 .show();
     }
 
-    // 신고 내용을 입력받는 다이얼로그 표시
     private void showReportDialog(String phoneNumber) {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_report, null);
         EditText etReportContent = dialogView.findViewById(R.id.et_report_content);
@@ -127,18 +117,14 @@ public class SearchFragment extends Fragment {
                 .setPositiveButton("제출", (dialog, which) -> {
                     String reportContent = etReportContent.getText().toString().trim();
                     if (!reportContent.isEmpty()) {
-                        // 신고 내용 처리 로직 (PhoneNumberAdapter에 추가)
                         MainActivity activity = (MainActivity) getActivity();
                         if (activity != null) {
                             PhoneNumberAdapter adapter = activity.getPhoneNumberAdapter();
-                            adapter.addPhoneNumber(phoneNumber);  // 번호를 추가
-                            adapter.addReport(phoneNumber, reportContent);  // 신고 내용 추가
+                            adapter.addPhoneNumber(phoneNumber);
+                            adapter.addReport(phoneNumber, reportContent);
 
-                            // 즉시 RecyclerView 갱신
                             adapter.notifyDataSetChanged();
-
-                            // 신고가 완료된 후 리스트 갱신
-                            recyclerView.setVisibility(View.VISIBLE);  // RecyclerView 다시 보이기
+                            recyclerView.setVisibility(View.VISIBLE);
                             Toast.makeText(getContext(), "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
@@ -149,7 +135,6 @@ public class SearchFragment extends Fragment {
                 .show();
     }
 
-    // ReportDetailsFragment 열기
     private void openReportDetailsFragment(String phoneNumber) {
         Bundle bundle = new Bundle();
         bundle.putString("PHONE_NUMBER", phoneNumber);
@@ -162,7 +147,6 @@ public class SearchFragment extends Fragment {
                 .commit();
     }
 
-    // 키보드 숨기기 메서드
     private void hideKeyboard() {
         if (getActivity() != null && getView() != null) {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

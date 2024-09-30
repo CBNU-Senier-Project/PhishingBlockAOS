@@ -5,13 +5,40 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- RadioGroup 수평 정렬 -->
+    <RadioGroup
+        android:layout_gravity="right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"> <!-- 수평 정렬 -->
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="번호" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="URL" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="계좌" />
+    </RadioGroup>
+
+    <!-- 신고 내용 입력 -->
     <EditText
         android:id="@+id/et_report_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="top"
         android:hint="Enter report content"
         android:inputType="textMultiLine"
-        android:minLines="4"
         android:maxLines="5"
-        android:gravity="top" />
+        android:minLines="3" />
 </LinearLayout>

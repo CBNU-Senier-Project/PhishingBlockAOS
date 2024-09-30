@@ -1,5 +1,4 @@
 package com.example.phishingblock;
-
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -14,9 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class PhoneNumberAdapter extends RecyclerView.Adapter<PhoneNumberAdapter.ViewHolder> {
@@ -24,8 +26,7 @@ public class PhoneNumberAdapter extends RecyclerView.Adapter<PhoneNumberAdapter.
     List<String> phoneNumbers;
     private OnItemClickListener listener;
     private FragmentActivity activity;
-    private Map<String, List<String>> reportMap = new HashMap<>();  // 전화번호별 신고 내용을 저장하는 맵
-
+    private Map<String, List<ReportDetail>> reportMap = new HashMap<>();  // 전화번호별 신고 내용을 저장하는 맵
 
     public interface OnItemClickListener {
         void onReportClick(String phoneNumber);
@@ -43,12 +44,10 @@ public class PhoneNumberAdapter extends RecyclerView.Adapter<PhoneNumberAdapter.
         this.phoneNumbers.addAll(newPhoneNumbers);
     }
 
-    // 새로운 메서드 추가: 전화번호 리스트 초기화
     public void clearPhoneNumbers() {
         phoneNumbers.clear();
     }
 
-    // 번호를 리스트에 추가하고 RecyclerView 갱신
     public void addPhoneNumber(String phoneNumber) {
         if (!phoneNumbers.contains(phoneNumber)) {
             phoneNumbers.add(phoneNumber);
@@ -113,20 +112,22 @@ public class PhoneNumberAdapter extends RecyclerView.Adapter<PhoneNumberAdapter.
                 .show();
     }
 
-
     // addReport에 로그 추가
     void addReport(String phoneNumber, String reportContent) {
         if (!reportMap.containsKey(phoneNumber)) {
             reportMap.put(phoneNumber, new ArrayList<>());
         }
-        reportMap.get(phoneNumber).add(reportContent);
 
-        // 로그 추가
-        Log.d("PhoneNumberAdapter", "Report added for phone: " + phoneNumber + " Content: " + reportContent);
+        // 현재 시간 가져오기
+        String currentTimestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date());
+
+        // 신고 내용 및 시간 추가
+        reportMap.get(phoneNumber).add(new ReportDetail(reportContent, currentTimestamp));
+
+        notifyDataSetChanged();  // RecyclerView 업데이트
     }
 
-    // 특정 번호의 신고 내용을 반환하는 메소드 (나중에 신고 내역을 조회할 때 사용)
-    public List<String> getReportsForPhoneNumber(String phoneNumber) {
+    public List<ReportDetail> getReportsForPhoneNumber(String phoneNumber) {
         return reportMap.getOrDefault(phoneNumber, new ArrayList<>());
     }
 
@@ -136,14 +137,12 @@ public class PhoneNumberAdapter extends RecyclerView.Adapter<PhoneNumberAdapter.
         Button btnReport;
         Button btnCheck;
 
-
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvPhoneNumber = itemView.findViewById(R.id.tv_phone_number);
             tvcheckcount = itemView.findViewById(R.id.tv_check_count);
             btnReport = itemView.findViewById(R.id.btn_report);
             btnCheck = itemView.findViewById(R.id.btn_check);
-
         }
     }
 }

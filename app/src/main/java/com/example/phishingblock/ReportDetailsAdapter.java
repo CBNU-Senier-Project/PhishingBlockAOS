@@ -10,9 +10,9 @@ import java.util.List;
 
 public class ReportDetailsAdapter extends RecyclerView.Adapter<ReportDetailsAdapter.ViewHolder> {
 
-    private List<String> reports;
+    private List<ReportDetail> reports;  // List<String> 대신 List<ReportDetail>
 
-    public ReportDetailsAdapter(List<String> reports) {
+    public ReportDetailsAdapter(List<ReportDetail> reports) {
         this.reports = reports;
     }
 
@@ -26,8 +26,9 @@ public class ReportDetailsAdapter extends RecyclerView.Adapter<ReportDetailsAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String report = reports.get(position);
-        holder.tvReport.setText(report);
+        ReportDetail reportDetail = reports.get(position);  // ReportDetail 객체 사용
+        holder.tvReport.setText(reportDetail.getContent());  // 신고 내용을 설정
+        holder.tvTimestamp.setText(reportDetail.getTimestamp());  // 신고한 시각을 설정
     }
 
     @Override
@@ -37,11 +38,12 @@ public class ReportDetailsAdapter extends RecyclerView.Adapter<ReportDetailsAdap
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvReport;
+        TextView tvTimestamp;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvReport = itemView.findViewById(R.id.tv_report);
+            tvTimestamp = itemView.findViewById(R.id.tv_report_timestamp);  // 신고 시각을 표시할 TextView
         }
     }
 }
-
