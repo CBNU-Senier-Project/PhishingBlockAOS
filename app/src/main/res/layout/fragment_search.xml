@@ -20,6 +20,48 @@
     android:textColor="@color/button_color"
     android:layout_marginBottom="16dp" />
 
+    <!-- RadioGroup 수평 정렬 -->
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginRight="15dp"
+            android:button="@drawable/custom_radio_button"
+            android:text="번호"
+            android:textColor="@color/button_color"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/custom_radio_button"
+            android:padding="10dp"
+            android:layout_marginRight="15dp"
+            android:text="URL"
+            android:textColor="@color/button_color"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:button="@drawable/custom_radio_button"
+            android:text="계좌"
+            android:textColor="@color/button_color"
+            android:textSize="16sp" />
+    </RadioGroup>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

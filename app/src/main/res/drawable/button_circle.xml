@@ -1,0 +1,20 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- 도형의 기본 크기를 맞추기 위해 고정된 사이즈 사용 -->
+    <size
+        android:width="50dp"
+        android:height="50dp" />
+
+    <!-- 배경 색상 설정 -->
+    <solid android:color="@color/white" />
+
+    <!-- 둥근 모서리, 반지름을 너비/높이의 절반보다 크게 설정하여 완전히 동그란 모양 만듦 -->
+    <corners android:radius="50dp" />
+    <shadowColor android:color="@color/shadow_color"/>
+    <!-- 패딩 설정 -->
+    <padding
+        android:left="8dp"
+        android:top="6dp"
+        android:right="8dp"
+        android:bottom="6dp" />
+
+</shape>

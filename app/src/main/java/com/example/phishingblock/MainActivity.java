@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private PhoneNumberAdapter phoneNumberAdapter;
     private BottomNavigationView bottomNavigationView;
     private static final int PERMISSION_REQUEST_CODE = 100;
     private AudioContentObserver audioObserver;
@@ -51,19 +50,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // PhoneNumberAdapter를 초기화하고 데이터 세팅
-        List<String> phoneNumbers = new ArrayList<>();  // 여기에 실제 데이터를 넣어야 합니다.
-        phoneNumberAdapter = new PhoneNumberAdapter(phoneNumbers, new PhoneNumberAdapter.OnItemClickListener() {
-            @Override
-            public void onReportClick(String phoneNumber) {
-                // 신고 버튼 클릭 시 처리
-            }
-
-            @Override
-            public void onCheckClick(String phoneNumber) {
-                // 조회 버튼 클릭 시 처리
-            }
-        }, this);
     }
 
     private Fragment getFragmentForMenuItem(MenuItem item) {
@@ -78,11 +64,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return null;
         }
-    }
-
-    // PhoneNumberAdapter에 접근할 수 있는 getter 추가
-    public PhoneNumberAdapter getPhoneNumberAdapter() {
-        return phoneNumberAdapter;
     }
 
     private void requestPermissions() {

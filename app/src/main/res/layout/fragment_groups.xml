@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -5,28 +6,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- 안내 메시지 및 추가 버튼을 포함하는 LinearLayout -->
     <LinearLayout
+        android:id="@+id/emptyStateLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnAddMember"
+        <!-- 안내 메시지 -->
+        <TextView
+            android:id="@+id/tvNoMembers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:background="@drawable/button_primary"
-            android:text="+ 가족 추가"
-            android:textColor="@color/white"
-            />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewGroupMembers"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp" >
-
-        </androidx.recyclerview.widget.RecyclerView>
+            android:text="가족 구성원이 등록되어 있지 않습니다.\n가족 구성원을 추가하려면 아래 버튼을 클릭하세요."
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"/>
     </LinearLayout>
+
+    <!-- 가족 구성원이 있을 때만 RecyclerView를 보이게 처리 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewGroupMembers"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="8dp"
+        android:visibility="gone"
+        android:paddingBottom="200dp"
+        android:clipToPadding="false"
+        tools:ignore="MissingConstraints" /><!-- 기본 상태에서는 숨김 처리 -->
+
+
+    <!-- 가족 구성원 추가 버튼 (항상 화면의 우측 하단에 위치) -->
+    <Button
+        android:id="@+id/btnAddMember"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="120dp"
+    android:background="@drawable/button_circle"
+    android:text="+"
+    android:textStyle="bold"
+    android:textSize="20dp"
+    android:textColor="@color/button_color"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="1" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

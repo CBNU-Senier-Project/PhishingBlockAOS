@@ -13,7 +13,7 @@ android:layout_height="wrap_content"
 android:orientation="vertical"
 android:padding="16dp"
 android:gravity="center"
-    android:background="@drawable/button_secondary">
+    >
 
 <!-- 프로필 이미지 -->
 <ImageView
@@ -22,7 +22,7 @@ android:gravity="center"
     android:layout_height="200dp"
     android:layout_gravity="center"
     android:scaleType="centerCrop"
-    android:src="@drawable/ic_home"
+    android:src="@drawable/ic_groups"
     android:contentDescription="Profile Image" />
 
 <!-- 이름 텍스트 -->

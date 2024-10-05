@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/white">
+
+    <!-- 안내 메시지 -->
+    <TextView
+        android:id="@+id/tvNoResultsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="검색된 번호가 없습니다."
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/button_color"
+        android:layout_gravity="center"
+        android:paddingBottom="16dp" />
+
+    <!-- 상세 메시지 -->
+    <TextView
+        android:id="@+id/tvNoResultsMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="신고하시겠습니까?"
+        android:textSize="18sp"
+        android:textColor="@color/gray"
+        android:layout_gravity="center"
+        android:paddingBottom="24dp" />
+
+    <!-- 버튼 영역 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- 취소 버튼 -->
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/button_secondary"
+            android:textColor="@color/button_color" />
+
+        <!-- 확인 버튼 -->
+        <Button
+            android:id="@+id/buttonConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="확인"
+            android:background="@drawable/button_primary"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</LinearLayout>
