@@ -5,12 +5,14 @@ public class ReportItem {
     private String type;  // 신고 유형
     private String time;  // 신고 시간
     private String content;  // 신고 내용
+    private int reportCount;  // 신고수
 
     public ReportItem(String item, String type, String time, String content) {
         this.item = item;
         this.type = type;
         this.time = time;
         this.content = content;
+        this.reportCount = 0;
     }
 
     // Getter & Setter 메서드
@@ -25,4 +27,11 @@ public class ReportItem {
 
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
+
+    public int getReportCount() {
+        return reportCount;
+    }
+    public void incrementReportCount() {
+        this.reportCount++;
+    }
 }

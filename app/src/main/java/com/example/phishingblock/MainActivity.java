@@ -50,7 +50,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 첫 화면에 HomeFragment를 기본으로 설정
+        if (savedInstanceState == null) {  // 화면 회전이나 재생성이 아닌 최초 실행 시
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());  // 홈 프래그먼트를 기본으로 설정
+            fragmentTransaction.commit();
+        }
     }
+
 
     private Fragment getFragmentForMenuItem(MenuItem item) {
         if (item.getItemId() == R.id.nav_home) {

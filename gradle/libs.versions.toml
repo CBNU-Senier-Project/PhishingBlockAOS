@@ -9,6 +9,7 @@ activity = "1.9.2"
 constraintlayout = "2.1.4"
 mobileFfmpegFull = "5.1"
 mobileFfmpegFullGplVersion = "4.4.LTS"
+preference = "1.2.1"
 
 [libraries]
 arthenica-mobile-ffmpeg-full-gpl = { module = "com.arthenica:mobile-ffmpeg-full-gpl", version.ref = "mobileFfmpegFullGplVersion" }
@@ -20,6 +21,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 mobile-ffmpeg-full = { module = "com.github.tanersener:mobile-ffmpeg-full", version.ref = "mobileFfmpegFull" }
+preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
