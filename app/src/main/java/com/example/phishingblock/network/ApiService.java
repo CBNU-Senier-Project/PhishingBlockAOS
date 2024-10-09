@@ -8,6 +8,11 @@ import com.example.phishingblock.network.payload.InvitationResponse;
 import com.example.phishingblock.network.payload.InviteMemberRequest;
 import com.example.phishingblock.network.payload.LoginRequest;
 import com.example.phishingblock.network.payload.LoginResponse;
+import com.example.phishingblock.network.payload.ReportItem;
+import com.example.phishingblock.network.payload.ReportItemRequest;
+import com.example.phishingblock.network.payload.ReportItemResponse;
+import com.example.phishingblock.network.payload.SearchPhishingDataRequest;
+import com.example.phishingblock.network.payload.SearchPhishingDataResponse;
 import com.example.phishingblock.network.payload.SignUpRequest;
 
 import java.util.List;
@@ -49,4 +54,16 @@ public interface ApiService {
     @PATCH("/user/api/v1/groups/invitations/{invitationId}/status")
     Call<Void> acceptInvitation(@Path("invitationId") Long invitationId, @Header("Authorization") String token, @Body AcceptInvitationRequest acceptInvitationRequest);
 
+    // 신고 데이터 추가
+    @POST("/phish/api/v1/add")
+    Call<Void> addReportItem(@Header("Authorization") String token, @Body ReportItemRequest reportItemRequest);
+
+    // 신고 데이터 조회
+    @GET("/phish/api/v1/data")
+    Call<List<ReportItemResponse>> getReportItems(@Query("type") String type);
+
+    // 피싱 데이터 검색 API
+    @POST("/phish/api/v1/search")
+    Call<List<SearchPhishingDataResponse>> searchPhishingData(@Body SearchPhishingDataRequest searchRequest);
 }
+

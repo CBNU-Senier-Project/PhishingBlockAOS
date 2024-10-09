@@ -92,19 +92,20 @@ public class LoginFragment extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // 로그인 성공
                     String accessToken = response.body().getAccessToken();
                     String refreshToken = response.body().getRefreshToken();
+
+                    // 토큰 저장
+                    TokenManager.saveAccessToken(LoginFragment.this, accessToken);
+                    TokenManager.saveRefreshToken(LoginFragment.this, refreshToken);
+
                     Toast.makeText(LoginFragment.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
 
                     // 메인 액티비티로 이동
                     Intent intent = new Intent(LoginFragment.this, MainActivity.class);
-                    intent.putExtra("accessToken", accessToken);
-                    intent.putExtra("refreshToken", refreshToken);
                     startActivity(intent);
                     finish();
                 } else {
-                    // 로그인 실패
                     Toast.makeText(LoginFragment.this, "로그인 실패. 이메일 또는 비밀번호를 확인하세요.", Toast.LENGTH_SHORT).show();
                 }
             }
