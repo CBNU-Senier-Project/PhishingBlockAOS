@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <!-- 초대 리스트 보기 버튼 -->
+    <Button
+        android:id="@+id/btn_view_invite_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="초대 리스트 보기"
+        android:layout_gravity="end"
+        android:layout_marginTop="16dp"/>
 
     <!-- 안내 메시지 및 추가 버튼을 포함하는 LinearLayout -->
     <LinearLayout
         android:id="@+id/emptyStateLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="1">
 
         <!-- 안내 메시지 -->
         <TextView
@@ -35,25 +47,26 @@
         android:layout_margin="8dp"
         android:visibility="gone"
         android:paddingBottom="200dp"
-        android:clipToPadding="false"
-        tools:ignore="MissingConstraints" /><!-- 기본 상태에서는 숨김 처리 -->
+        android:clipToPadding="false"/>
 
+    <!-- FrameLayout 추가 -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <!-- 가족 구성원 추가 버튼 (항상 화면의 우측 하단에 위치) -->
     <Button
         android:id="@+id/btnAddMember"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_gravity="end"
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="120dp"
-    android:background="@drawable/button_circle"
-    android:text="+"
-    android:textStyle="bold"
-    android:textSize="20dp"
-    android:textColor="@color/button_color"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="1" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:background="@drawable/button_circle"
+        android:text="+"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/button_color"/>
+</LinearLayout>

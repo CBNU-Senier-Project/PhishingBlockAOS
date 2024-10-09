@@ -10,11 +10,21 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.phishingblock.network.ApiService;
+import com.example.phishingblock.network.RetrofitClient;
+import com.example.phishingblock.network.payload.LoginRequest;
+import com.example.phishingblock.network.payload.LoginResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LoginFragment extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private Button btnLogin, btnSignup;
-    private boolean isPasswordVisible = false;
+    private boolean isPasswordVisible = false; // 비밀번호 가시성 상태 변수
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,19 +34,17 @@ public class LoginFragment extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         btnLogin = findViewById(R.id.btn_login);
         btnSignup = findViewById(R.id.tv_signup);
-        final EditText etPassword = findViewById(R.id.et_password);
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
+                String email = etEmail.getText().toString().trim();
+                String password = etPassword.getText().toString().trim();
 
-                if (validateCredentials(email, password)) {
-                    Intent intent = new Intent(LoginFragment.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                if (!email.isEmpty() && !password.isEmpty()) {
+                    performLogin(email, password);
                 } else {
-                    Toast.makeText(LoginFragment.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginFragment.this, "이메일과 비밀번호를 입력하세요.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -49,27 +57,23 @@ public class LoginFragment extends AppCompatActivity {
             }
         });
 
-        // 눈 아이콘 클릭 리스너 설정
+        // 비밀번호 가시성 토글 기능 추가
         etPassword.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                // 오른쪽 Drawable 클릭 체크
-                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_RIGHT = 2; // 오른쪽 Drawable index
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (event.getRawX() >= (etPassword.getRight() - etPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        // 비밀번호 가시성 토글
-                        isPasswordVisible = !isPasswordVisible;
+                        // 비밀번호 가시성 상태 토글
                         if (isPasswordVisible) {
-                            // 비밀번호 보이게 설정
-                            etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            etPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_eye_off, 0);
+                            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); // 비밀번호 숨기기
+                            etPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_eye, 0); // 눈 아이콘 변경
                         } else {
-                            // 비밀번호 숨기기 설정
-                            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            etPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_eye, 0);
+                            etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); // 비밀번호 보이기
+                            etPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_eye_off, 0); // 눈 감긴 아이콘 변경
                         }
-                        // 커서 위치 재설정
-                        etPassword.setSelection(etPassword.getText().length());
+                        isPasswordVisible = !isPasswordVisible; // 상태 변경
+                        etPassword.setSelection(etPassword.getText().length()); // 커서 위치 설정
                         return true;
                     }
                 }
@@ -78,7 +82,37 @@ public class LoginFragment extends AppCompatActivity {
         });
     }
 
-    private boolean validateCredentials(String email, String password) {
-        return email.equals("test@example.com") && password.equals("123");
+    private void performLogin(String email, String password) {
+        ApiService apiService = RetrofitClient.getApiService();
+
+        LoginRequest loginRequest = new LoginRequest(email, password);
+        Call<LoginResponse> call = apiService.login(loginRequest);
+
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // 로그인 성공
+                    String accessToken = response.body().getAccessToken();
+                    String refreshToken = response.body().getRefreshToken();
+                    Toast.makeText(LoginFragment.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
+
+                    // 메인 액티비티로 이동
+                    Intent intent = new Intent(LoginFragment.this, MainActivity.class);
+                    intent.putExtra("accessToken", accessToken);
+                    intent.putExtra("refreshToken", refreshToken);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    // 로그인 실패
+                    Toast.makeText(LoginFragment.this, "로그인 실패. 이메일 또는 비밀번호를 확인하세요.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(LoginFragment.this, "오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -16,19 +16,37 @@
         android:layout_gravity="center"
         android:layout_marginBottom="32dp" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/et_email"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_user"
-        android:drawablePadding="12dp"
-        android:hint="이메일"
-        android:padding="16dp"
-        android:background="@drawable/bg_edit_text"
-        android:inputType="textEmailAddress"
-        android:textColorHint="#B0B0B0"
-        android:textColor="@color/button_color"
-        android:layout_marginBottom="16dp" />
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_edit_text"
+            android:drawableLeft="@drawable/ic_user"
+            android:drawablePadding="12dp"
+            android:hint="이메일"
+            android:inputType="textEmailAddress"
+            android:padding="16dp"
+            android:textColor="@color/button_color"
+            android:textColorHint="#B0B0B0" />
+
+        <Button
+            android:id="@+id/btn_check_email2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:background="@color/button_color"
+            android:text="중복 확인"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/et_password"
@@ -70,19 +88,6 @@
         android:padding="16dp"
         android:background="@drawable/bg_edit_text"
         android:inputType="phone"
-        android:textColorHint="#B0B0B0"
-        android:textColor="@color/button_color"
-        android:layout_marginBottom="16dp" />
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/et_birth_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_calendar"
-        android:drawablePadding="12dp"
-        android:hint="생년월일 (YYYY-MM-DD)"
-        android:padding="16dp"
-        android:background="@drawable/bg_edit_text"
         android:textColorHint="#B0B0B0"
         android:textColor="@color/button_color"
         android:layout_marginBottom="16dp" />
