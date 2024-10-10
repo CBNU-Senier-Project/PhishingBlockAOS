@@ -1,11 +1,11 @@
 package com.example.phishingblock.network.payload;
 
-public class ReportItemRequest {
+public class AddReportItemRequest {
     private String phishingType;  // 신고 유형 (ACCOUNT, PHONE, URL)
-    private String value;         // 의심되는 번호, URL, 계좌
+    private String value;         // 신고된 값 (예: 번호, URL, 계좌)
     private String content;       // 신고 내용
 
-    public ReportItemRequest(String phishingType, String value, String content) {
+    public AddReportItemRequest(String phishingType, String value, String content) {
         this.phishingType = phishingType;
         this.value = value;
         this.content = content;
@@ -36,3 +36,4 @@ public class ReportItemRequest {
         this.content = content;
     }
 }
+

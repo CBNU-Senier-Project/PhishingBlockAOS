@@ -57,7 +57,7 @@ public class InviteListFragment extends Fragment {
         Long receiverId = 123L; // 예시 값
         String token = "Bearer your_access_token_here"; // 실제 액세스 토큰 사용
 
-        Call<List<InvitationResponse>> call = apiService.getInvitationList(receiverId, token);
+        Call<List<InvitationResponse>> call = apiService.getInvitations(token, receiverId);
         call.enqueue(new Callback<List<InvitationResponse>>() {
             @Override
             public void onResponse(Call<List<InvitationResponse>> call, Response<List<InvitationResponse>> response) {

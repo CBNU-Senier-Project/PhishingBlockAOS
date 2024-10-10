@@ -77,7 +77,7 @@ public class InviteListAdapter extends RecyclerView.Adapter<InviteListAdapter.In
 
         AcceptInvitationRequest acceptRequest = new AcceptInvitationRequest("ACCEPTED");
 
-        Call<Void> call = apiService.acceptInvitation(invitationId, token, acceptRequest);
+        Call<Void> call = apiService.acceptInvitation(invitationId, acceptRequest);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -104,7 +104,7 @@ public class InviteListAdapter extends RecyclerView.Adapter<InviteListAdapter.In
 
         AcceptInvitationRequest rejectRequest = new AcceptInvitationRequest("REJECTED");
 
-        Call<Void> call = apiService.acceptInvitation(invitationId, token, rejectRequest);
+        Call<Void> call = apiService.acceptInvitation(invitationId, rejectRequest);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

@@ -4,14 +4,12 @@ public class ReportItemResponse {
     private Long phishingId;      // 신고 아이템 ID
     private String phishingType;  // 신고 유형 (ACCOUNT, PHONE, URL)
     private String value;         // 신고된 항목 (번호, URL, 계좌)
-    private String content;       // 신고 내용
 
     // Constructor
-    public ReportItemResponse(Long phishingId, String phishingType, String value, String content) {
+    public ReportItemResponse(Long phishingId, String phishingType, String value) {
         this.phishingId = phishingId;
         this.phishingType = phishingType;
         this.value = value;
-        this.content = content;
     }
 
     // Getter & Setter
@@ -37,13 +35,5 @@ public class ReportItemResponse {
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 }

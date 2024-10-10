@@ -90,7 +90,7 @@ public class GroupsFragment extends Fragment {
         ApiService apiService = RetrofitClient.getApiService();
         InviteMemberRequest inviteMemberRequest = new InviteMemberRequest(receiverId);
 
-        Call<Void> call = apiService.inviteMember(groupId, "Bearer " + token, inviteMemberRequest);
+        Call<Void> call = apiService.inviteMember(groupId,  inviteMemberRequest);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

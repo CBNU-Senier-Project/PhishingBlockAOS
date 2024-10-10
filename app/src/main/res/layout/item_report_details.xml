@@ -12,6 +12,14 @@
         android:text="Report details"
         android:textSize="18sp" />
 
-
+    <!-- 신고한 날짜와 시각을 표시하는 TextView 추가 -->
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reported on: YYYY-MM-DD HH:mm"
+        android:textSize="12sp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="4dp" />
 
 </LinearLayout>

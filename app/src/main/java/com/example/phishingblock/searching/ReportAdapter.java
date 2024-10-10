@@ -20,7 +20,8 @@ import com.example.phishingblock.R;
 import com.example.phishingblock.TokenManager;
 import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
-import com.example.phishingblock.network.payload.ReportItemRequest;
+import com.example.phishingblock.network.payload.AddReportItemRequest;
+import com.example.phishingblock.network.payload.ReportItemResponse;
 import com.example.phishingblock.network.payload.SearchPhishingDataResponse;
 
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class ReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private List<SearchPhishingDataResponse> reportItems;
     private Context context;
-    private int viewType; // 1: SearchFragment, 2: ReportDetailsFragment
+    private int viewType;  // 1: SearchFragment, 2: ReportDetailsFragment
     private Map<String, Integer> reportCountMap;  // 신고 항목과 해당 신고 수를 저장하는 맵
 
     public ReportAdapter(List<SearchPhishingDataResponse> reportItems, Context context, int viewType) {
@@ -48,26 +49,34 @@ public class ReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     // 같은 type과 value를 가진 항목을 그룹화하여 신고 수를 계산하는 메서드
     private void groupReportItems() {
         reportCountMap = new HashMap<>();
+        Map<String, SearchPhishingDataResponse> uniqueItemsMap = new HashMap<>();
+
         for (SearchPhishingDataResponse item : reportItems) {
             String key = item.getPhishingType() + "_" + item.getValue();  // type과 value를 키로 사용
-            if (reportCountMap.containsKey(key)) {
-                reportCountMap.put(key, reportCountMap.get(key) + 1);  // 같은 항목이면 개수 증가
+
+            // 중복된 항목을 제거하고, 신고 수를 계산
+            if (!uniqueItemsMap.containsKey(key)) {
+                uniqueItemsMap.put(key, item);  // 중복되지 않은 항목 추가
+                reportCountMap.put(key, 1);     // 첫 번째 신고로 설정
             } else {
-                reportCountMap.put(key, 1);  // 새로운 항목이면 1로 시작
+                // 중복된 항목의 경우 신고 수를 증가시킴
+                reportCountMap.put(key, reportCountMap.get(key) + 1);
             }
         }
+
+        // 중복이 제거된 항목으로 reportItems 리스트를 갱신
+        reportItems.clear();
+        reportItems.addAll(uniqueItemsMap.values());
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if (this.viewType == 1) {
-            // SearchFragment에 사용할 뷰홀더
+        if (this.viewType == 1) {  // SearchFragment ViewHolder
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_reports, parent, false);
             return new SimpleViewHolder(view);
-        } else {
-            // ReportDetailsFragment에 사용할 뷰홀더
+        } else {  // ReportDetailsFragment ViewHolder
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_report_details, parent, false);
             return new DetailViewHolder(view);
         }
@@ -75,79 +84,87 @@ public class ReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        // 항목 리스트에서 해당 position의 항목을 가져옵니다.
         SearchPhishingDataResponse reportValue = reportItems.get(position);
 
-        // 같은 type과 value를 가진 항목을 하나로 묶고 그 수를 tv_check_count에 표시
-        if (viewType == 1) {
+        if (viewType == 1) {  // If in SearchFragment, bind the simple view
             SimpleViewHolder simpleViewHolder = (SimpleViewHolder) holder;
-            String key = reportValue.getPhishingType() + "_" + reportValue.getValue();  // type과 value로 키 생성
+            String key = reportValue.getPhishingType() + "_" + reportValue.getValue();
+            int count = reportCountMap.get(key);  // Get the count for the specific type and value
 
-            // 해당 key에 대한 신고 건수를 가져옴
-            int count = reportCountMap.get(key);
+            simpleViewHolder.tvItem.setText(reportValue.getValue());  // Display the value
+            simpleViewHolder.tvCheckCount.setText(String.valueOf(count));  // Display the count
 
-            simpleViewHolder.tvItem.setText(reportValue.getValue());  // 신고된 항목 (예: 번호, URL, 계좌)
-            simpleViewHolder.tvCheckCount.setText(String.valueOf(count));  // 신고된 동일 항목의 개수 표시
-
+            // Handle the Report button click event
             simpleViewHolder.btnReport.setOnClickListener(v -> {
-                showReportDialog(reportValue.getValue(), reportValue.getPhishingType());  // 다이얼로그 표시
+                showReportDialog(reportValue.getValue(), reportValue.getPhishingType());
             });
 
+            // Handle the Check button click event
             simpleViewHolder.btnCheck.setOnClickListener(v -> {
                 ReportDetailsFragment reportDetailsFragment = new ReportDetailsFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("VALUE", reportValue.getValue());  // 신고 항목 값 (예: 전화번호, URL)
-                bundle.putString("TYPE", reportValue.getPhishingType());  // 신고 유형 (예: ACCOUNT, PHONE, URL)
+                bundle.putString("VALUE", reportValue.getValue());
+                bundle.putString("TYPE", reportValue.getPhishingType());
                 reportDetailsFragment.setArguments(bundle);
-
                 if (context instanceof FragmentActivity) {
-                    FragmentActivity activity = (FragmentActivity) context;
-                    activity.getSupportFragmentManager().beginTransaction()
+                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, reportDetailsFragment)
                             .addToBackStack(null)
                             .commit();
                 }
             });
 
-        } else {
+        } else {  // If in ReportDetailsFragment, bind the detailed view
             DetailViewHolder detailViewHolder = (DetailViewHolder) holder;
-            detailViewHolder.tvContent.setText(reportValue.getContent());
+            // Add binding logic for detailed view here if needed
         }
     }
 
     @Override
     public int getItemCount() {
-        return reportCountMap.size();  // 신고 항목의 고유한 개수만 반환
+        return reportItems.size();  // Return the size of the report items list
     }
 
-    public void updateReportItems(List<SearchPhishingDataResponse> newReportItems) {
+    // Update the adapter with items loaded by type
+    public void updateReportItemsByType(List<ReportItemResponse> newReportItems) {
         this.reportItems.clear();
-        this.reportItems.addAll(newReportItems);
-        groupReportItems();  // 새롭게 항목을 그룹화
-        notifyDataSetChanged();
+        for (ReportItemResponse item : newReportItems) {
+            this.reportItems.add(new SearchPhishingDataResponse(item.getPhishingId(), item.getPhishingType(), item.getValue()));  // Adjusted for SearchPhishingDataResponse constructor
+        }
+        groupReportItems();  // Regroup the updated items
+        notifyDataSetChanged();  // Notify adapter that data has changed
     }
 
-    // SimpleViewHolder: SearchFragment용 뷰홀더
+    // Update the adapter with search results
+    public void updateSearchResults(List<SearchPhishingDataResponse> searchResults) {
+        this.reportItems.clear();
+        this.reportItems.addAll(searchResults);  // 검색 결과 리스트를 어댑터에 전달
+        groupReportItems();  // 데이터 그룹화
+        notifyDataSetChanged();  // 어댑터에 변경 사항 반영
+    }
+
+    // ViewHolder for SearchFragment
     public static class SimpleViewHolder extends RecyclerView.ViewHolder {
         TextView tvItem, tvCheckCount;
         Button btnReport, btnCheck;
 
         public SimpleViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvItem = itemView.findViewById(R.id.tv_value);  // 신고된 항목 (예: 번호, URL, 계좌)
+            tvItem = itemView.findViewById(R.id.tv_value);  // 신고된 항목 (번호, URL, 계좌)
             tvCheckCount = itemView.findViewById(R.id.tv_check_count);  // 신고된 항목의 개수
             btnReport = itemView.findViewById(R.id.btn_report);  // 신고 버튼
             btnCheck = itemView.findViewById(R.id.btn_check);  // 조회 버튼
         }
     }
 
-    // DetailViewHolder: ReportDetailsFragment용 뷰홀더
+    // ViewHolder for ReportDetailsFragment
     public static class DetailViewHolder extends RecyclerView.ViewHolder {
-        TextView tvContent;
+        TextView tvContent, tvTime;
 
         public DetailViewHolder(@NonNull View itemView) {
             super(itemView);
             tvContent = itemView.findViewById(R.id.tv_content);  // 신고 내용만 표시
+            tvTime = itemView.findViewById(R.id.tv_time);  // 신고된 시간 표시
         }
     }
 
@@ -168,34 +185,22 @@ public class ReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             radioGroup.check(R.id.radioButton3);
         }
 
-        dialogView.findViewById(R.id.radioButton).setEnabled(false);  //버튼 비활성화
-        dialogView.findViewById(R.id.radioButton2).setEnabled(false);
-        dialogView.findViewById(R.id.radioButton3).setEnabled(false);
+        radioGroup.findViewById(R.id.radioButton).setEnabled(false);
+        radioGroup.findViewById(R.id.radioButton2).setEnabled(false);
+        radioGroup.findViewById(R.id.radioButton3).setEnabled(false);
 
-        AlertDialog reportDialog = new AlertDialog.Builder(context)
-                .setView(dialogView)
-                .create();
-
+        AlertDialog reportDialog = new AlertDialog.Builder(context).setView(dialogView).create();
         buttonSubmit.setOnClickListener(v -> {
             String reportContent = etReportContent.getText().toString().trim();
             if (!reportContent.isEmpty()) {
-                // 선택된 타입을 유지하여 서버로 신고 데이터 전송
-                String reportValue = value;  // 신고된 값
-
-                // TokenManager에서 저장된 토큰을 가져옴
                 String token = TokenManager.getAccessToken(context);
                 if (token == null) {
                     Toast.makeText(context, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-                    return;  // 토큰이 없으면 신고를 진행할 수 없음
+                    return;
                 }
-
-                // 신고 데이터를 서버로 전송하는 로직 추가
                 ApiService apiService = RetrofitClient.getApiService();
-                ReportItemRequest reportRequest = new ReportItemRequest(type, reportValue, reportContent);
-
-                // API 호출
-                Call<Void> call = apiService.addReportItem("Bearer " + token, reportRequest);
-                call.enqueue(new Callback<Void>() {
+                AddReportItemRequest addReportRequest = new AddReportItemRequest(type, value, reportContent);  // No value needed here
+                apiService.addReportItem("Bearer " + token, addReportRequest).enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
@@ -215,10 +220,7 @@ public class ReportAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 Toast.makeText(context, "신고 내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
             }
         });
-
         buttonCancel.setOnClickListener(v -> reportDialog.dismiss());
-
         reportDialog.show();
     }
-
 }

@@ -28,7 +28,7 @@ public class ReportDetailsFragment extends Fragment {
     private RecyclerView recyclerView;
     private ReportAdapter adapter;
     private String value;  // 선택된 항목의 값 (예: 전화번호, URL, 계좌 등)
-    private String type;  // 선택된 항목의 타입(전화번호, URL, 계좌 등)
+    private String type;   // 선택된 항목의 타입 (예: ACCOUNT, PHONE, URL)
 
     @Nullable
     @Override
@@ -59,29 +59,8 @@ public class ReportDetailsFragment extends Fragment {
 
     // 서버에서 선택된 아이템과 타입에 맞는 신고 항목을 필터링하여 로드
     private void loadFilteredReports() {
-        ApiService apiService = RetrofitClient.getApiService();
-        SearchPhishingDataRequest request = new SearchPhishingDataRequest(type, value, "");
 
-        Call<List<SearchPhishingDataResponse>> call = apiService.searchPhishingData(request);
-        call.enqueue(new Callback<List<SearchPhishingDataResponse>>() {
-            @Override
-            public void onResponse(Call<List<SearchPhishingDataResponse>> call, Response<List<SearchPhishingDataResponse>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<SearchPhishingDataResponse> filteredReports = response.body();
-                    if (filteredReports.isEmpty()) {
-                        Toast.makeText(getContext(), "해당 값에 대한 신고 내역이 없습니다.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        adapter.updateReportItems(filteredReports);  // 필터링된 데이터를 어댑터에 업데이트
-                    }
-                } else {
-                    Toast.makeText(getContext(), "신고 항목을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<List<SearchPhishingDataResponse>> call, Throwable t) {
-                Toast.makeText(getContext(), "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+
     }
 }
