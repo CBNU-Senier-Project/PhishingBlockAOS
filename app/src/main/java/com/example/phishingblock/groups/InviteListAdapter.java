@@ -13,7 +13,9 @@ import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
 import com.example.phishingblock.network.payload.AcceptInvitationRequest;
 import com.example.phishingblock.network.payload.InvitationResponse;
+
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,14 +44,14 @@ public class InviteListAdapter extends RecyclerView.Adapter<InviteListAdapter.In
         holder.tvGroupName.setText(invitation.getGroupName());
         holder.tvSenderName.setText("보낸 사람: " + invitation.getSenderName());
 
-        // 수락 버튼 클릭 시 처리
+        // 수락 버튼 클릭 시 초대 수락 처리
         holder.btnAccept.setOnClickListener(v -> {
-            acceptInvitation(holder, invitation.getInvitationId());
+            acceptInvitation(holder, invitation.getInvitationId(), position);
         });
 
-        // 거절 버튼 클릭 시 처리
+        // 거절 버튼 클릭 시 초대 거절 처리
         holder.btnReject.setOnClickListener(v -> {
-            rejectInvitation(holder, invitation.getInvitationId());
+            rejectInvitation(holder, invitation.getInvitationId(), position);
         });
     }
 
@@ -72,20 +74,19 @@ public class InviteListAdapter extends RecyclerView.Adapter<InviteListAdapter.In
     }
 
     // 초대 수락 처리
-    private void acceptInvitation(InviteViewHolder holder, Long invitationId) {
+    private void acceptInvitation(InviteViewHolder holder, int invitationId, int position) {
         ApiService apiService = RetrofitClient.getApiService();
 
-        AcceptInvitationRequest acceptRequest = new AcceptInvitationRequest("ACCEPTED");
-
-        Call<Void> call = apiService.acceptInvitation(invitationId, acceptRequest);
+        AcceptInvitationRequest request = new AcceptInvitationRequest("ACCEPTED");
+        Call<Void> call = apiService.acceptInvitation(token, invitationId, request);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(holder.itemView.getContext(), "초대 수락 성공!", Toast.LENGTH_SHORT).show();
                     // 초대 리스트에서 해당 항목 제거
-                    invitationList.remove(holder.getAdapterPosition());
-                    notifyItemRemoved(holder.getAdapterPosition());
+                    invitationList.remove(position);
+                    notifyItemRemoved(position);
                 } else {
                     Toast.makeText(holder.itemView.getContext(), "초대 수락 실패", Toast.LENGTH_SHORT).show();
                 }
@@ -99,20 +100,19 @@ public class InviteListAdapter extends RecyclerView.Adapter<InviteListAdapter.In
     }
 
     // 초대 거절 처리
-    private void rejectInvitation(InviteViewHolder holder, Long invitationId) {
+    private void rejectInvitation(InviteViewHolder holder, int invitationId, int position) {
         ApiService apiService = RetrofitClient.getApiService();
 
-        AcceptInvitationRequest rejectRequest = new AcceptInvitationRequest("REJECTED");
-
-        Call<Void> call = apiService.acceptInvitation(invitationId, rejectRequest);
+        AcceptInvitationRequest request = new AcceptInvitationRequest("REJECTED");
+        Call<Void> call = apiService.acceptInvitation(token, invitationId, request);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(holder.itemView.getContext(), "초대 거절 성공!", Toast.LENGTH_SHORT).show();
                     // 초대 리스트에서 해당 항목 제거
-                    invitationList.remove(holder.getAdapterPosition());
-                    notifyItemRemoved(holder.getAdapterPosition());
+                    invitationList.remove(position);
+                    notifyItemRemoved(position);
                 } else {
                     Toast.makeText(holder.itemView.getContext(), "초대 거절 실패", Toast.LENGTH_SHORT).show();
                 }

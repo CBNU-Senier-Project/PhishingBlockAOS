@@ -7,45 +7,42 @@
     app:cardCornerRadius="30dp"
     app:cardElevation="4dp">
 
-<LinearLayout
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:padding="16dp"
-android:gravity="center"
-    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center">
 
-<!-- 프로필 이미지 -->
-<ImageView
-    android:id="@+id/profileImageView"
-    android:layout_width="200dp"
-    android:layout_height="200dp"
-    android:layout_gravity="center"
-    android:scaleType="centerCrop"
-    android:src="@drawable/ic_groups"
-    android:contentDescription="Profile Image" />
+        <!-- 프로필 이미지 -->
+        <ImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_groups"
+            android:contentDescription="Profile Image" />
 
-<!-- 이름 텍스트 -->
-<TextView
-    android:id="@+id/nameTextView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:text="이름"
-    android:textSize="16sp"
-    android:textStyle="bold"
-    android:textColor="@android:color/black"
-    android:gravity="center" />
+        <!-- 이름 텍스트 -->
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="이름"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:gravity="center" />
 
-<!-- 삭제 버튼 -->
-<ImageView
-    android:id="@+id/deleteButton"
-    android:layout_width="25dp"
-    android:layout_height="25dp"
-    android:layout_marginTop="12dp"
-    android:src="@drawable/ic_delete"
-
-    android:contentDescription="Delete" />
-
-</LinearLayout>
+        <!-- 삭제 버튼 -->
+        <ImageView
+            android:id="@+id/deleteButton"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Delete" />
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

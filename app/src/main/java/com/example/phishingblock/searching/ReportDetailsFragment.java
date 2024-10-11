@@ -14,8 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.phishingblock.R;
 import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
-import com.example.phishingblock.network.payload.SearchPhishingDataRequest;
-import com.example.phishingblock.network.payload.SearchPhishingDataResponse;
+import com.example.phishingblock.network.payload.DetailPhishingDataResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ import retrofit2.Response;
 
 public class ReportDetailsFragment extends Fragment {
     private RecyclerView recyclerView;
-    private ReportAdapter adapter;
+    private DetailAdapter adapter;  // DetailAdapter로 변경
     private String value;  // 선택된 항목의 값 (예: 전화번호, URL, 계좌 등)
     private String type;   // 선택된 항목의 타입 (예: ACCOUNT, PHONE, URL)
 
@@ -43,8 +42,8 @@ public class ReportDetailsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // 어댑터 생성 시 viewType 2를 넘김 (ReportDetailsFragment용)
-        adapter = new ReportAdapter(new ArrayList<>(), getContext(), 2);
+        // 어댑터 생성 (DetailAdapter 사용)
+        adapter = new DetailAdapter(new ArrayList<>(), getContext());
         recyclerView.setAdapter(adapter);
 
         // 선택된 아이템과 타입을 Bundle에서 가져옴
@@ -57,10 +56,28 @@ public class ReportDetailsFragment extends Fragment {
         loadFilteredReports();
     }
 
-    // 서버에서 선택된 아이템과 타입에 맞는 신고 항목을 필터링하여 로드
     private void loadFilteredReports() {
+        ApiService apiService = RetrofitClient.getApiService();
 
+        Call<List<DetailPhishingDataResponse>> call = apiService.DetailPhishingData(type, value);
 
+        call.enqueue(new Callback<List<DetailPhishingDataResponse>>() {
+            @Override
+            public void onResponse(Call<List<DetailPhishingDataResponse>> call, Response<List<DetailPhishingDataResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<DetailPhishingDataResponse> reportDetails = response.body();
+                    adapter = new DetailAdapter(reportDetails, getContext());
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    Toast.makeText(getContext(), "데이터를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<DetailPhishingDataResponse>> call, Throwable t) {
+                Toast.makeText(getContext(), "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 }

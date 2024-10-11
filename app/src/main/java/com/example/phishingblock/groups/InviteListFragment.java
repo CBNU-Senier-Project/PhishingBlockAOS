@@ -13,10 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.phishingblock.R;
+import com.example.phishingblock.TokenManager;
 import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
 import com.example.phishingblock.network.payload.InvitationResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -40,6 +42,11 @@ public class InviteListFragment extends Fragment {
 
         inviteRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // 어댑터를 먼저 초기화 (빈 리스트로 설정)
+        invitationList = new ArrayList<>(); // 빈 리스트 초기화
+        inviteListAdapter = new InviteListAdapter(invitationList, "Bearer your_access_token_here");
+        inviteRecyclerView.setAdapter(inviteListAdapter); // 어댑터를 RecyclerView에 연결
+
         // 초기 데이터 로드
         loadInviteList();
 
@@ -54,8 +61,8 @@ public class InviteListFragment extends Fragment {
         ApiService apiService = RetrofitClient.getApiService();
 
         // 사용자 ID와 토큰은 실제로 사용해야 하는 값을 넣어야 함
-        Long receiverId = 123L; // 예시 값
-        String token = "Bearer your_access_token_here"; // 실제 액세스 토큰 사용
+        int receiverId = 1; // 예시 값
+        String token = TokenManager.getAccessToken(getContext());; // 실제 액세스 토큰 사용
 
         Call<List<InvitationResponse>> call = apiService.getInvitations(token, receiverId);
         call.enqueue(new Callback<List<InvitationResponse>>() {
@@ -64,9 +71,9 @@ public class InviteListFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     invitationList = response.body();
 
-                    // InviteListAdapter에 데이터 및 토큰 전달
+                    // 어댑터에 새로운 데이터를 전달
                     inviteListAdapter = new InviteListAdapter(invitationList, token);
-                    inviteRecyclerView.setAdapter(inviteListAdapter);
+                    inviteRecyclerView.setAdapter(inviteListAdapter); // 어댑터 연결
                 } else {
                     Toast.makeText(getContext(), "초대 리스트를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
                 }

@@ -1,13 +1,18 @@
 package com.example.phishingblock.network.payload;
 
 public class InviteMemberRequest {
-    private Long receiverId;
+    private String receiverPhoneNumber;
 
-    public InviteMemberRequest(Long receiverId) {
-        this.receiverId = receiverId;
+    public InviteMemberRequest(String receiverPhoneNumber) {
+        this.receiverPhoneNumber = receiverPhoneNumber;
     }
 
-    public Long getReceiverId() {
-        return receiverId;
+    // Getter & Setter
+    public String getReceiverPhoneNumber() {
+        return receiverPhoneNumber;
+    }
+
+    public void setReceiverPhoneNumber(String receiverPhoneNumber) {
+        this.receiverPhoneNumber = receiverPhoneNumber;
     }
 }

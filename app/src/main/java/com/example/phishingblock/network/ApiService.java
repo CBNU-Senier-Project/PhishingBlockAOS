@@ -4,8 +4,8 @@ package com.example.phishingblock.network;
 
 import com.example.phishingblock.network.payload.AcceptInvitationRequest;
 import com.example.phishingblock.network.payload.AddReportItemRequest;
-import com.example.phishingblock.network.payload.DetailPhishingDataRequest;
 import com.example.phishingblock.network.payload.DetailPhishingDataResponse;
+import com.example.phishingblock.network.payload.GroupMemberResponse;
 import com.example.phishingblock.network.payload.GroupRequest;
 import com.example.phishingblock.network.payload.InvitationResponse;
 import com.example.phishingblock.network.payload.InviteMemberRequest;
@@ -15,11 +15,14 @@ import com.example.phishingblock.network.payload.ReportItemResponse;
 import com.example.phishingblock.network.payload.SearchPhishingDataRequest;
 import com.example.phishingblock.network.payload.SearchPhishingDataResponse;
 import com.example.phishingblock.network.payload.SignUpRequest;
+import com.example.phishingblock.network.payload.UserIdResponse;
+import com.example.phishingblock.network.payload.UserProfileResponse;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PATCH;
@@ -55,21 +58,58 @@ public interface ApiService {
     @POST("/phish/api/v1/search/type-and-value")
     Call<List<SearchPhishingDataResponse>> searchPhishingData(@Body SearchPhishingDataRequest searchRequest);
 
-    // 피싱 데이터 세부 사항 조회
     @POST("/phish/api/v1/detail/search")
-    Call<List<DetailPhishingDataResponse>> DetailPhishingData(@Body DetailPhishingDataRequest DetailRequest);
+    Call<List<DetailPhishingDataResponse>> DetailPhishingData(
+            @Query("phishingType") String phishingType,
+            @Query("value") String value
+    );
 
-    // 초대 수락 API
-    @PATCH("/user/api/v1/groups/invitations/{invitationId}/status")
-    Call<Void> acceptInvitation(@Path("invitationId") long invitationId, @Body AcceptInvitationRequest request);
 
-    // 초대장 조회 API
-    @GET("/user/api/v1/groups/invitations/{receive_id}")
-    Call<List<InvitationResponse>> getInvitations(@Header("Authorization") String token, @Path("receive_id") long receiveId);
+    // 전화번호로 회원 ID 조회
+    @GET("/user/api/v1/users/phone/{phoneNumber}")
+    Call<UserIdResponse> getUserIdByPhoneNumber(@Path("phoneNumber") String phoneNumber);
 
-    // 그룹원 초대 API
+    // 그룹 초대 메시지 전송 API
     @POST("/user/api/v1/groups/{groupId}/invite")
-    Call<Void> inviteMember(@Path("groupId") long groupId, @Body InviteMemberRequest request);
+    Call<Void> inviteMember(
+            @Header("Authorization") String authorizationToken,
+            @Path("groupId") int groupId,
+            @Body InviteMemberRequest inviteMemberRequest
+    );
 
+    // 초대장 리스트 조회 API
+    @GET("/user/api/v1/groups/invitations/{receive_id}")
+    Call<List<InvitationResponse>> getInvitations(
+            @Header("Authorization") String authorizationToken,
+            @Path("receive_id") long receiveId
+    );
+
+    // 초대 수락 및 거절 API
+    @PATCH("/user/api/v1/groups/invitations/{invitationId}/status")
+    Call<Void> acceptInvitation(
+            @Header("Authorization") String token,  // Authorization 토큰
+            @Path("invitationId") long invitationId,  // 초대 ID
+            @Body AcceptInvitationRequest request  // 상태(ACCEPTED/REJECTED)를 담은 요청 본문
+    );
+
+    // 회원 정보 조회 API
+    @GET("/user/api/v1/users/profile")
+    Call<UserProfileResponse> getUserProfile(@Header("X-Authorization") String authorization);
+
+    // 그룹 ID 조회 API
+    @GET("/user/api/v1/groups/creator/{creatorId}/group-ids")
+    Call<List<Long>> getGroupIds(@Path("creatorId") long creatorId);
+
+    // 그룹 멤버 조회 API
+    @GET("/user/api/v1/groups/group/members")
+    Call<List<GroupMemberResponse>> getGroupMembers(@Header("Authorization") String token);
+
+    // 그룹 멤버 삭제 API
+    @DELETE("/user/api/v1/groups/{groupId}/members/{memberId}")
+    Call<Void> deleteGroupMember(
+            @Path("groupId") int groupId,
+            @Path("memberId") int memberId,
+            @Header("Authorization") String token
+    );
 }
 

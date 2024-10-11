@@ -41,7 +41,7 @@ public class SearchFragment extends Fragment {
 
     private EditText etSearch;
     private RecyclerView recyclerView;
-    private ReportAdapter adapter;
+    private SearchAdapter adapter;  // SearchAdapter로 변경
     private String reportType = "PHONE";  // Default type
 
     @Nullable
@@ -58,8 +58,8 @@ public class SearchFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Initialize the adapter
-        adapter = new ReportAdapter(new ArrayList<>(), getContext(), 1);
+        // Initialize the SearchAdapter
+        adapter = new SearchAdapter(getContext());
         recyclerView.setAdapter(adapter);
 
         // RadioGroup to choose reportType (ACCOUNT, URL, PHONE)
@@ -110,7 +110,7 @@ public class SearchFragment extends Fragment {
             public void onResponse(Call<List<ReportItemResponse>> call, Response<List<ReportItemResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<ReportItemResponse> reportItems = response.body();
-                    adapter.updateReportItemsByType(reportItems);  // New method to update adapter by type
+                    adapter.updateReportItemsByType(reportItems);  // Update the adapter by type
                 } else {
                     Toast.makeText(getContext(), "데이터를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -154,7 +154,6 @@ public class SearchFragment extends Fragment {
             }
         });
     }
-
 
     // Method to hide the keyboard
     private void hideKeyboard() {

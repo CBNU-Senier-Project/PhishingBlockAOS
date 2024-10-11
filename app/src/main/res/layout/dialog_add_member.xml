@@ -39,11 +39,11 @@
         android:layout_marginBottom="16dp" />
 
     <EditText
-        android:id="@+id/editTextEmail"
+        android:id="@+id/editTextPhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawablePadding="12dp"
-        android:hint="이메일 입력"
+        android:hint="전화번호 입력"
         android:padding="16dp"
         android:background="@drawable/bg_edit_text"
         android:textColorHint="#B0B0B0"
