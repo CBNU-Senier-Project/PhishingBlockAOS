@@ -1,4 +1,4 @@
-package com.example.phishingblock;
+package com.example.phishingblock.background;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.example.phishingblock.NotificationUtils;
 
 public class PhoneStateReceiver extends BroadcastReceiver {
 

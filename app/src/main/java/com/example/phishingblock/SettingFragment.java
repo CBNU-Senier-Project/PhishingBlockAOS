@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
+import com.example.phishingblock.home.LoginFragment;
+
 public class SettingFragment extends Fragment {
 
     private TextView textViewProfileName;

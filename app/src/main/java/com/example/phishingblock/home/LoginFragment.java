@@ -1,4 +1,4 @@
-package com.example.phishingblock;
+package com.example.phishingblock.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.phishingblock.MainActivity;
+import com.example.phishingblock.R;
+import com.example.phishingblock.background.TokenManager;
 import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
 import com.example.phishingblock.network.payload.LoginRequest;
@@ -18,6 +21,8 @@ import com.example.phishingblock.network.payload.LoginResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.text.Editable;
+import android.text.TextWatcher;
 
 public class LoginFragment extends AppCompatActivity {
 
@@ -34,7 +39,36 @@ public class LoginFragment extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         btnLogin = findViewById(R.id.btn_login);
         btnSignup = findViewById(R.id.tv_signup);
+        btnLogin.setEnabled(false);
+        btnLogin.setBackgroundResource(R.drawable.button_secondary);
+        // TextWatcher로 이메일과 비밀번호 입력 상태를 감지
+        TextWatcher loginTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String emailInput = etEmail.getText().toString().trim();
+                String passwordInput = etPassword.getText().toString().trim();
+
+                // 이메일과 비밀번호가 모두 입력되면 로그인 버튼 활성화
+                if (!emailInput.isEmpty() && !passwordInput.isEmpty()) {
+                    btnLogin.setEnabled(true);
+                    btnLogin.setBackgroundResource(R.drawable.button_primary); // 활성화 상태일 때의 배경 리소스
+                } else {
+                    btnLogin.setEnabled(false);
+                    btnLogin.setBackgroundResource(R.drawable.button_secondary); // 비활성화 상태일 때의 배경 리소스
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+
+        etEmail.addTextChangedListener(loginTextWatcher);
+        etPassword.addTextChangedListener(loginTextWatcher);
+
+        // 나머지 버튼 및 이벤트 리스너 설정
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,8 +1,10 @@
-package com.example.phishingblock;
+package com.example.phishingblock.background;
 
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.phishingblock.MainActivity;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

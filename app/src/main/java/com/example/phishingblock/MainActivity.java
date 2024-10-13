@@ -16,7 +16,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.phishingblock.background.AudioContentObserver;
 import com.example.phishingblock.groups.GroupsFragment;
+import com.example.phishingblock.home.HomeFragment;
 import com.example.phishingblock.searching.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

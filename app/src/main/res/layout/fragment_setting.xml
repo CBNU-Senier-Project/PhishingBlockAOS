@@ -1,28 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    xmlns:androoid="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <!-- 상단에 배경 이미지 -->
+    <ImageView
+        android:id="@+id/top_background_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="200dp"
+        android:background="@drawable/rounded_rectangle"
+        android:src="@drawable/bg_main"
+        android:scaleType="centerCrop"
+        android:clipToOutline="true"
+        />
+
+
+
+    <!-- 겹쳐서 배치되는 콘텐츠 (ScrollView 및 다른 요소들) -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
+        >
 
         <!-- 사용자 프로필 섹션 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="20dp"
             android:text="프로필"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:orientation="horizontal"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="70dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -50,7 +73,10 @@
                 android:id="@+id/button_change_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="프로필 변경" />
+                android:background="@drawable/button_primary"
+                android:text="프로필 변경"
+                android:textColor="@color/white"/>
+
         </LinearLayout>
 
         <!-- 프로필 변경 버튼 -->
@@ -69,7 +95,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginBottom="8dp"
             android:text="알림 활성화" />
+            <!-- 회색 가로선 추가 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0" />
 
         <!-- 다크 모드 설정 스위치 -->
         <TextView
@@ -81,20 +113,36 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp" />
 
-        <Switch
+            <Switch
             android:id="@+id/switch_dark_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginBottom="8dp"
             android:text="다크 모드 활성화" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0" />
+
         <!-- 로그아웃 버튼 -->
-        <Button
+            <Button
             android:id="@+id/button_logout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="로그아웃"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+                android:textSize="16dp"
+                android:textColor="@color/gray"
+                android:textStyle="bold"
+                android:background="@android:color/transparent"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0" />
 
         <!-- 앱 버전 정보 -->
         <TextView
@@ -114,3 +162,5 @@
 
     </LinearLayout>
 </ScrollView>
+
+    </FrameLayout>

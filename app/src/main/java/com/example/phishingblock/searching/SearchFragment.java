@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.phishingblock.R;
-import com.example.phishingblock.TokenManager;
+import com.example.phishingblock.background.TokenManager;
 import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
 import com.example.phishingblock.network.payload.AddReportItemRequest;
@@ -30,7 +30,6 @@ import com.example.phishingblock.network.payload.ReportItemResponse;
 import com.example.phishingblock.network.payload.SearchPhishingDataRequest;
 import com.example.phishingblock.network.payload.SearchPhishingDataResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;

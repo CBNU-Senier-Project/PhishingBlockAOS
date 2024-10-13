@@ -4,7 +4,9 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:gravity="center"
-    android:background="@android:color/white">
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:background="@drawable/bg_main">
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,22 +14,25 @@
         android:text="가입하기"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/button_color"
+        android:textColor="@color/primaryColor"
         android:layout_gravity="center"
         android:layout_marginBottom="32dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:layout_marginBottom="16dp">
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_edit_text"
+
+            android:background="@drawable/stoke_et_color"
             android:drawableLeft="@drawable/ic_user"
             android:drawablePadding="12dp"
             android:hint="이메일"
@@ -39,9 +44,11 @@
         <Button
             android:id="@+id/btn_check_email2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:layout_marginLeft="8dp"
-            android:background="@color/button_color"
+            android:layout_gravity="center"
+            android:elevation="8dp"
+            android:background="@drawable/button_primary"
             android:text="중복 확인"
             android:textColor="@android:color/white" />
 
@@ -57,7 +64,7 @@
         android:drawablePadding="12dp"
         android:hint="비밀번호"
         android:padding="16dp"
-        android:background="@drawable/bg_edit_text"
+        android:background="@drawable/stoke_et_color"
         android:inputType="textPassword"
         android:textColorHint="#B0B0B0"
         android:textColor="@color/button_color"
@@ -72,7 +79,7 @@
         android:drawablePadding="12dp"
         android:hint="비밀번호 확인"
         android:padding="16dp"
-        android:background="@drawable/bg_edit_text"
+        android:background="@drawable/stoke_et_color"
         android:inputType="textPassword"
         android:textColorHint="#B0B0B0"
         android:textColor="@color/button_color"
@@ -86,7 +93,7 @@
         android:drawablePadding="12dp"
         android:hint="전화번호"
         android:padding="16dp"
-        android:background="@drawable/bg_edit_text"
+        android:background="@drawable/stoke_et_color"
         android:inputType="phone"
         android:textColorHint="#B0B0B0"
         android:textColor="@color/button_color"
@@ -100,7 +107,7 @@
         android:drawablePadding="12dp"
         android:hint="닉네임"
         android:padding="16dp"
-        android:background="@drawable/bg_edit_text"
+        android:background="@drawable/stoke_et_color"
         android:textColorHint="#B0B0B0"
         android:textColor="@color/button_color"
         android:layout_marginBottom="16dp" /> <!-- Add this line for the nickname -->
@@ -109,8 +116,9 @@
         android:id="@+id/btn_signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="8dp"
         android:text="회원가입"
-        android:background="@color/button_color"
+        android:background="@drawable/button_primary"
         android:textColor="@android:color/white"
         android:layout_marginBottom="16dp" />
 
@@ -119,6 +127,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="이미 계정이 있습니까? 로그인"
-        android:textColor="@color/button_color"
+        android:textColor="@color/white"
         android:layout_gravity="center" />
 </LinearLayout>

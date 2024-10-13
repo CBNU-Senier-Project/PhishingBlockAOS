@@ -1,10 +1,11 @@
 <!-- res/drawable/button_primary.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
     <corners android:radius="30dp" />
+    <shadowColor android:color="@color/shadow_color"/>
     <padding
         android:left="8dp"
         android:right="8dp"
         android:top="6dp"
         android:bottom="6dp" />
-    <solid android:color="@color/button_color" />
+    <solid android:color="@color/primaryColor" />
 </shape>

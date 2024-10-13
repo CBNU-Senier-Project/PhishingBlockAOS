@@ -11,16 +11,17 @@
     <color name="gray">#FF808080</color>
     <color name="light_gray">#FFD3D3D3</color>
     <color name="dark_gray">#FFA9A9A9</color>
+    <color name="et_color">#757575</color>
 
-        <color name="primaryColor">#6f6a5e</color>
-        <color name="secondaryColor">#9C2CF3</color>
+        <color name="primaryColor">#6030EA</color>
+        <color name="secondaryColor">#6A00F4</color>
         <color name="accentColor">#FFC107</color>
-        <color name="backgroundColor">#F7F8FA</color>
+        <color name="backgroundColor">#F7F5FF</color>
         <color name="textColorPrimary">#1F1F39</color>
         <color name="textColorSecondary">#858597</color>
         <color name="grayLight">#E0E0E0</color>
         <color name="taskBackground">#F5F6FA</color>
     <color name="shadow_color">#55000000</color>
-    <color name="button_color">#6f6a5e</color>
+    <color name="button_color">#9A77FF</color>
 
 </resources>
