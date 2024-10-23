@@ -64,6 +64,6 @@ public class GroupMemberAdapter extends RecyclerView.Adapter<GroupMemberAdapter.
 
     // 멤버 삭제 리스너 인터페이스
     public interface OnMemberDeleteListener {
-        void onMemberDelete(int memberId);
+        void onMemberDelete(long memberId);
     }
 }

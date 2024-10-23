@@ -16,8 +16,26 @@ android:layout_height="match_parent">
 <ImageView
     android:id="@+id/logo_Image"
     android:layout_width="300dp"
-    android:layout_height="300dp"
+    android:layout_height="200dp"
     android:src="@drawable/app_logo"
-    android:layout_centerInParent="true" />
+    android:layout_marginTop="200dp"
+    android:layout_marginBottom="50dp"
+    android:layout_centerHorizontal="true"
+
+    android:scaleType="centerCrop" />
+    <TextView
+        android:id="@+id/logo_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PHISHING BLOCK"
+        android:textColor="@android:color/white"
+        android:textSize="30dp"
+        android:shadowColor="@color/shadow_color"
+    android:shadowDx="2"
+    android:shadowDy="2"
+    android:shadowRadius="10"
+        android:layout_below="@id/logo_Image"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="16dp" />
 
 </RelativeLayout>

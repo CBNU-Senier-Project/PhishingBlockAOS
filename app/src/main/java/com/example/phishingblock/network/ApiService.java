@@ -31,15 +31,15 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
-    @POST("user/api/v1/signup")
+    @POST("/user/api/v1/user/signup")
     Call<Void> signUp(@Body SignUpRequest request);
 
     // Email duplicate check API
-    @GET("/user/api/v1/users/check")
+    @GET("/user/api/v1/user/users/check")
     Call<Void> checkEmailDuplicate(@Query("email") String email);
 
     // 로그인 API
-    @POST("/user/api/v1/signin")
+    @POST("/user/api/v1/auth/signin")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 
     // 그룹 생성 API
@@ -47,33 +47,34 @@ public interface ApiService {
     Call<Void> createGroup(@Header("Authorization") String token, @Body GroupRequest groupRequest);
 
     // 신고 데이터 추가
-    @POST("/phish/api/v1/add")
+    @POST("/user/api/v1/phish/add")
     Call<Void> addReportItem(@Header("Authorization") String token, @Body AddReportItemRequest addreportItemRequest);
 
     // 신고 데이터 조회 type별
-    @GET("/phish/api/v1/data")
-    Call<List<ReportItemResponse>> getReportItems(@Query("type") String type);
+    @GET("/user/api/v1/phish/data")
+    Call<List<ReportItemResponse>> getReportItems(@Header("Authorization") String authorizationToken,@Query("type") String type);
 
     // 피싱 데이터 검색 API (리스트 형태로 받음)
-    @POST("/phish/api/v1/search/type-and-value")
-    Call<List<SearchPhishingDataResponse>> searchPhishingData(@Body SearchPhishingDataRequest searchRequest);
+    @POST("/user/api/v1/phish/search/type-and-value")
+    Call<List<SearchPhishingDataResponse>> searchPhishingData(@Header("Authorization") String token,@Body SearchPhishingDataRequest searchRequest);
 
-    @POST("/phish/api/v1/detail/search")
+    @POST("/user/api/v1/phish/detail/search")
     Call<List<DetailPhishingDataResponse>> DetailPhishingData(
+            @Header("Authorization") String token,
             @Query("phishingType") String phishingType,
             @Query("value") String value
     );
 
 
     // 전화번호로 회원 ID 조회
-    @GET("/user/api/v1/users/phone/{phoneNumber}")
-    Call<UserIdResponse> getUserIdByPhoneNumber(@Path("phoneNumber") String phoneNumber);
+    @GET("/user/api/v1/user/users/phone/{phoneNumber}")
+    Call<UserIdResponse> getUserIdByPhoneNumber(@Header("Authorization") String token,@Path("phoneNumber") String phoneNumber);
 
     // 그룹 초대 메시지 전송 API
     @POST("/user/api/v1/groups/{groupId}/invite")
     Call<Void> inviteMember(
             @Header("Authorization") String authorizationToken,
-            @Path("groupId") int groupId,
+            @Path("groupId") long groupId,
             @Body InviteMemberRequest inviteMemberRequest
     );
 
@@ -93,12 +94,12 @@ public interface ApiService {
     );
 
     // 회원 정보 조회 API
-    @GET("/user/api/v1/users/profile")
-    Call<UserProfileResponse> getUserProfile(@Header("X-Authorization") String authorization);
+    @GET("/user/api/v1/user/users/profile")
+    Call<UserProfileResponse> getUserProfile(@Header("Authorization") String authorization);
 
     // 그룹 ID 조회 API
     @GET("/user/api/v1/groups/creator/{creatorId}/group-ids")
-    Call<List<Long>> getGroupIds(@Path("creatorId") long creatorId);
+    Call<List<Long>> getGroupIds(@Header("Authorization") String token,@Path("creatorId") long creatorId);
 
     // 그룹 멤버 조회 API
     @GET("/user/api/v1/groups/group/members")
@@ -107,8 +108,8 @@ public interface ApiService {
     // 그룹 멤버 삭제 API
     @DELETE("/user/api/v1/groups/{groupId}/members/{memberId}")
     Call<Void> deleteGroupMember(
-            @Path("groupId") int groupId,
-            @Path("memberId") int memberId,
+            @Path("groupId") long groupId,
+            @Path("memberId") long memberId,
             @Header("Authorization") String token
     );
 }

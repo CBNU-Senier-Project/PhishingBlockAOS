@@ -74,7 +74,7 @@ public class InviteListAdapter extends RecyclerView.Adapter<InviteListAdapter.In
     }
 
     // 초대 수락 처리
-    private void acceptInvitation(InviteViewHolder holder, int invitationId, int position) {
+    private void acceptInvitation(InviteViewHolder holder, long invitationId, int position) {
         ApiService apiService = RetrofitClient.getApiService();
 
         AcceptInvitationRequest request = new AcceptInvitationRequest("ACCEPTED");
@@ -100,7 +100,7 @@ public class InviteListAdapter extends RecyclerView.Adapter<InviteListAdapter.In
     }
 
     // 초대 거절 처리
-    private void rejectInvitation(InviteViewHolder holder, int invitationId, int position) {
+    private void rejectInvitation(InviteViewHolder holder, long invitationId, int position) {
         ApiService apiService = RetrofitClient.getApiService();
 
         AcceptInvitationRequest request = new AcceptInvitationRequest("REJECTED");

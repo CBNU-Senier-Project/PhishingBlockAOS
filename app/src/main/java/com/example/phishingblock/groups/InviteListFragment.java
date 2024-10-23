@@ -14,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.phishingblock.R;
 import com.example.phishingblock.background.TokenManager;
+import com.example.phishingblock.background.UserManager;
 import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
 import com.example.phishingblock.network.payload.InvitationResponse;
+import com.example.phishingblock.network.payload.UserProfileResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,20 +33,30 @@ public class InviteListFragment extends Fragment {
     private Button btnRefresh;
     private InviteListAdapter inviteListAdapter;
     private List<InvitationResponse> invitationList;
-
+    private long receiverId;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.invite_list_fragment, container, false);
-
+        String token = TokenManager.getAccessToken(getContext());
         inviteRecyclerView = view.findViewById(R.id.rv_invite_list);
         btnRefresh = view.findViewById(R.id.btn_refresh);
+
+        UserProfileResponse userProfile = UserManager.getUserProfile(getContext());
+        if (userProfile != null) {
+            receiverId = userProfile.getUserId();
+            String nickname = userProfile.getUserInfo().getNickname();
+            String phoneNumber = userProfile.getUserInfo().getPhnum();
+            Toast.makeText(getContext(), "유저 닉네임: " + nickname, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "유저 프로필을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+        }
 
         inviteRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // 어댑터를 먼저 초기화 (빈 리스트로 설정)
         invitationList = new ArrayList<>(); // 빈 리스트 초기화
-        inviteListAdapter = new InviteListAdapter(invitationList, "Bearer your_access_token_here");
+        inviteListAdapter = new InviteListAdapter(invitationList, token);
         inviteRecyclerView.setAdapter(inviteListAdapter); // 어댑터를 RecyclerView에 연결
 
         // 초기 데이터 로드
@@ -61,7 +73,6 @@ public class InviteListFragment extends Fragment {
         ApiService apiService = RetrofitClient.getApiService();
 
         // 사용자 ID와 토큰은 실제로 사용해야 하는 값을 넣어야 함
-        int receiverId = 1; // 예시 값
         String token = TokenManager.getAccessToken(getContext());; // 실제 액세스 토큰 사용
 
         Call<List<InvitationResponse>> call = apiService.getInvitations(token, receiverId);

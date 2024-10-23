@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.phishingblock.R;
+import com.example.phishingblock.background.TokenManager;
 import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
 import com.example.phishingblock.network.payload.DetailPhishingDataResponse;
@@ -58,8 +59,8 @@ public class ReportDetailsFragment extends Fragment {
 
     private void loadFilteredReports() {
         ApiService apiService = RetrofitClient.getApiService();
-
-        Call<List<DetailPhishingDataResponse>> call = apiService.DetailPhishingData(type, value);
+        String token = TokenManager.getAccessToken(getContext());
+        Call<List<DetailPhishingDataResponse>> call = apiService.DetailPhishingData(token,type, value);
 
         call.enqueue(new Callback<List<DetailPhishingDataResponse>>() {
             @Override

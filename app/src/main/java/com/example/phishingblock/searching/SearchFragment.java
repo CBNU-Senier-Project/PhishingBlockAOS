@@ -102,7 +102,8 @@ public class SearchFragment extends Fragment {
     // Method to load data by type (when radio button is clicked)
     private void loadReportItemsByType(String type) {
         ApiService apiService = RetrofitClient.getApiService();
-        Call<List<ReportItemResponse>> call = apiService.getReportItems(type);
+        String token = TokenManager.getAccessToken(getContext());
+        Call<List<ReportItemResponse>> call = apiService.getReportItems(token,type);
 
         call.enqueue(new Callback<List<ReportItemResponse>>() {
             @Override
@@ -126,9 +127,10 @@ public class SearchFragment extends Fragment {
     private void loadReportItemsBySearch(String type, String query) {
         ApiService apiService = RetrofitClient.getApiService();
         SearchPhishingDataRequest searchRequest = new SearchPhishingDataRequest(type, query);
+        String token = TokenManager.getAccessToken(getContext());
 
         // API 호출: 피싱 데이터 검색 (검색 결과는 리스트 형태로 받음)
-        Call<List<SearchPhishingDataResponse>> call = apiService.searchPhishingData(searchRequest);
+        Call<List<SearchPhishingDataResponse>> call = apiService.searchPhishingData(token, searchRequest);
 
         call.enqueue(new Callback<List<SearchPhishingDataResponse>>() {
             @Override

@@ -1,6 +1,7 @@
 package com.example.phishingblock.home;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.MotionEvent;
@@ -11,12 +12,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.phishingblock.MainActivity;
+import com.example.phishingblock.background.UserManager;
 import com.example.phishingblock.R;
 import com.example.phishingblock.background.TokenManager;
 import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
 import com.example.phishingblock.network.payload.LoginRequest;
 import com.example.phishingblock.network.payload.LoginResponse;
+import com.example.phishingblock.network.payload.UserProfileResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,9 +58,11 @@ public class LoginFragment extends AppCompatActivity {
                 if (!emailInput.isEmpty() && !passwordInput.isEmpty()) {
                     btnLogin.setEnabled(true);
                     btnLogin.setBackgroundResource(R.drawable.button_primary); // 활성화 상태일 때의 배경 리소스
+                    btnLogin.setTextColor(getResources().getColor(R.color.white));
                 } else {
                     btnLogin.setEnabled(false);
-                    btnLogin.setBackgroundResource(R.drawable.button_secondary); // 비활성화 상태일 때의 배경 리소스
+                    btnLogin.setBackgroundResource(R.drawable.button_secondary);  // 비활성화 상태 배경
+                    btnLogin.setTextColor(getResources().getColor(R.color.light_gray));  // 비활성화 상태 텍스트 색상
                 }
             }
 
@@ -116,6 +121,30 @@ public class LoginFragment extends AppCompatActivity {
         });
     }
 
+    private void loadUserProfile(String accessToken) {
+        ApiService apiService = RetrofitClient.getApiService();
+        Call<UserProfileResponse> call = apiService.getUserProfile(accessToken);
+
+        call.enqueue(new Callback<UserProfileResponse>() {
+            @Override
+            public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    UserProfileResponse userProfile = response.body();
+                    // UserManager에 프로필 저장
+                    UserManager.saveUserProfile(LoginFragment.this, userProfile);
+                    Toast.makeText(LoginFragment.this, "유저 프로필 불러오기 성공!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginFragment.this, "유저 프로필 불러오기 실패!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                Toast.makeText(LoginFragment.this, "프로필 불러오기 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void performLogin(String email, String password) {
         ApiService apiService = RetrofitClient.getApiService();
 
@@ -132,6 +161,9 @@ public class LoginFragment extends AppCompatActivity {
                     // 토큰 저장
                     TokenManager.saveAccessToken(LoginFragment.this, accessToken);
                     TokenManager.saveRefreshToken(LoginFragment.this, refreshToken);
+
+                    // 토큰으로 유저 프로필 불러오기
+                    loadUserProfile(accessToken);
 
                     Toast.makeText(LoginFragment.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
 

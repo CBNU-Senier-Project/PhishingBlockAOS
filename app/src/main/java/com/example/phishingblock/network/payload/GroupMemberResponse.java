@@ -1,12 +1,12 @@
 package com.example.phishingblock.network.payload;
 
 public class GroupMemberResponse {
-    private int userId;
+    private long userId;
     private String name;
     private String phnum;
 
     // Getter와 Setter
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 

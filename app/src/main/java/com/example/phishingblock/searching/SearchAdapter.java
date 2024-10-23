@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,10 +61,22 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SimpleView
             ReportItemResponse reportValue = (ReportItemResponse) item;
             String key = reportValue.getPhishingType() + "_" + reportValue.getValue();
             int count = reportCountMap.get(key);  // 신고 수 가져오기
+            String value = reportValue.getPhishingType();
+            // 타입에 따라 이미지 뷰 변경
+            if (value.equals("PHONE")) {
+                holder.imageView.setImageResource(R.drawable.ic_phone1);  // 전화 타입에 맞는 이미지 설정
+            } else if (value.equals("URL")) {
+                holder.imageView.setImageResource(R.drawable.ic_link);  // URL 타입에 맞는 이미지 설정
+            } else if (value.equals("ACCOUNT")) {
+                holder.imageView.setImageResource(R.drawable.ic_account);  // 계좌 타입에 맞는 이미지 설정
+            }
 
             holder.tvItem.setText(reportValue.getValue());  // Display the value
             holder.tvCheckCount.setText(String.valueOf(count));  // 신고된 항목의 개수 표시
-
+            // Handle the Report button click event
+            holder.btnReport.setOnClickListener(v -> {
+                showReportDialog(((ReportItemResponse) item).getValue(), ((ReportItemResponse) item).getPhishingType());
+            });
             // Handle the Check button click event
             holder.btnCheck.setOnClickListener(v -> {
                 ReportDetailsFragment reportDetailsFragment = new ReportDetailsFragment();
@@ -83,9 +96,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SimpleView
             SearchPhishingDataResponse searchResult = (SearchPhishingDataResponse) item;
             String key = searchResult.getPhishingType() + "_" + searchResult.getValue();
             int count = reportCountMap.get(key);  // 신고 수 가져오기
-
+            String value = searchResult.getPhishingType();
             holder.tvItem.setText(searchResult.getValue());  // Display the value
             holder.tvCheckCount.setText(String.valueOf(count));  // 신고된 항목의 개수 표시
+
+
+            if (value.equals("PHONE")) {
+                holder.imageView.setImageResource(R.drawable.ic_phone1);  // 전화 타입에 맞는 이미지 설정
+            } else if (value.equals("URL")) {
+                holder.imageView.setImageResource(R.drawable.ic_link);  // URL 타입에 맞는 이미지 설정
+            } else if (value.equals("ACCOUNT")) {
+                holder.imageView.setImageResource(R.drawable.ic_account);  // 계좌 타입에 맞는 이미지 설정
+            }
 
             // Handle the Report button click event
             holder.btnReport.setOnClickListener(v -> {
@@ -153,6 +175,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SimpleView
     }
 
     public static class SimpleViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
         TextView tvItem, tvCheckCount;
         Button btnReport, btnCheck;
 
@@ -162,6 +185,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SimpleView
             tvCheckCount = itemView.findViewById(R.id.tv_check_count);  // 신고된 항목의 개수
             btnReport = itemView.findViewById(R.id.btn_report);  // 신고 버튼
             btnCheck = itemView.findViewById(R.id.btn_check);  // 조회 버튼
+            imageView = itemView.findViewById(R.id.imageView);  // ImageView 초기화
         }
     }
 
