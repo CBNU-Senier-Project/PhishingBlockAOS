@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/bg_main"
     android:padding="16dp">
+
+    <TextView
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="회원 정보 수정"
+        android:textSize="30sp"
+        android:layout_marginBottom="30dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,32 +21,49 @@
         android:textSize="16sp"
         android:layout_marginBottom="8dp" />
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/edittext_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="사용자 이름 입력" />
+        android:drawableLeft="@drawable/ic_user"
+        android:drawablePadding="12dp"
+        android:hint="사용자 이름 입력"
+        android:padding="16dp"
+        android:background="@drawable/stoke_et_color"
+        android:textColorHint="#B0B0B0"
+        android:textColor="@color/button_color"
+        android:layout_marginBottom="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="이메일"
+        android:text="전화번호"
         android:textSize="16sp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp" />
 
-    <EditText
-        android:id="@+id/edittext_email"
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/edittext_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="이메일 입력"
-        android:inputType="textEmailAddress" />
+        android:drawableLeft="@drawable/ic_phone"
+        android:drawablePadding="12dp"
+        android:hint="전화번호"
+        android:padding="16dp"
+        android:background="@drawable/stoke_et_color"
+        android:inputType="phone"
+        android:textColorHint="#B0B0B0"
+        android:textColor="@color/button_color"
+        android:layout_marginBottom="16dp" />
 
     <!-- 저장 버튼 -->
     <Button
         android:id="@+id/button_save"
+        android:layout_gravity="end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_primary"
+        android:textColor="@color/white"
         android:text="저장"
         android:layout_marginTop="16dp" />
 

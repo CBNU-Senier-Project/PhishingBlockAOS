@@ -4,6 +4,7 @@ package com.example.phishingblock.network;
 
 import com.example.phishingblock.network.payload.AcceptInvitationRequest;
 import com.example.phishingblock.network.payload.AddReportItemRequest;
+import com.example.phishingblock.network.payload.CallDialogueRequest;
 import com.example.phishingblock.network.payload.DetailPhishingDataResponse;
 import com.example.phishingblock.network.payload.GroupMemberResponse;
 import com.example.phishingblock.network.payload.GroupRequest;
@@ -11,11 +12,13 @@ import com.example.phishingblock.network.payload.InvitationResponse;
 import com.example.phishingblock.network.payload.InviteMemberRequest;
 import com.example.phishingblock.network.payload.LoginRequest;
 import com.example.phishingblock.network.payload.LoginResponse;
+import com.example.phishingblock.network.payload.PredictionResponse;
 import com.example.phishingblock.network.payload.ReportItemResponse;
 import com.example.phishingblock.network.payload.SearchPhishingDataRequest;
 import com.example.phishingblock.network.payload.SearchPhishingDataResponse;
 import com.example.phishingblock.network.payload.SignUpRequest;
 import com.example.phishingblock.network.payload.UserIdResponse;
+import com.example.phishingblock.network.payload.UserProfileRequest;
 import com.example.phishingblock.network.payload.UserProfileResponse;
 
 import java.util.List;
@@ -27,6 +30,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -41,6 +45,12 @@ public interface ApiService {
     // 로그인 API
     @POST("/user/api/v1/auth/signin")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
+
+    // 로그아웃 API
+    @POST("/user/api/v1/auth/signout")
+    Call<Void> logout(
+            @Header("Authorization") String accessToken   // AccessToken 헤더
+    );
 
     // 그룹 생성 API
     @POST("/user/api/v1/groups")
@@ -112,5 +122,19 @@ public interface ApiService {
             @Path("memberId") long memberId,
             @Header("Authorization") String token
     );
+    // 회원 정보 수정 API
+    @PUT("/user/api/v1/user/users/edit")
+    Call<Void> editUserProfile(
+            @Header("Authorization") String token,     // 인증 토큰
+            @Body UserProfileRequest userProfileRequest  // 요청 본문
+    );
+
+    //ai 판단
+    @POST("predict/api/v1/predict")
+    Call<PredictionResponse> predictdialogue(
+            @Header("Authorization") String token,
+            @Body CallDialogueRequest callDialogueRequset
+    );
+
 }
 

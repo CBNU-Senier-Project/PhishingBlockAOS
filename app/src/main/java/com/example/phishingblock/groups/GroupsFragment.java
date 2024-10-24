@@ -138,8 +138,16 @@ public class GroupsFragment extends Fragment {
                 // 입력한 전화번호와 자신의 전화번호를 비교
                 if (!phoneNumber.equals(UserphoneNumber)) {  // 자신의 전화번호와 비교
                     if (groupId != -1) {  // 그룹 ID가 유효한지 확인
-                        inviteMemberToGroup(groupId, phoneNumber, token);
-                        dialog.dismiss();
+
+                        // 그룹 멤버들의 전화번호와 비교
+                        if (!isPhoneNumberAlreadyInGroup(phoneNumber)) {
+                            // 그룹에 해당 전화번호가 없을 경우 초대 실행
+                            inviteMemberToGroup(groupId, phoneNumber, token);
+                            dialog.dismiss();
+                        } else {
+                            // 중복된 전화번호일 경우 경고 메시지 표시
+                            Toast.makeText(getContext(), "이미 그룹에 있는 멤버입니다.", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Toast.makeText(getContext(), "그룹 ID를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
                     }
@@ -152,6 +160,17 @@ public class GroupsFragment extends Fragment {
             }
         });
     }
+
+    // 그룹 멤버 목록에 이미 해당 전화번호가 있는지 확인하는 메서드
+    private boolean isPhoneNumberAlreadyInGroup(String phoneNumber) {
+        for (GroupMemberResponse member : groupMemberResponseList) {
+            if (member.getPhnum().equals(phoneNumber)) {
+                return true;  // 그룹에 이미 존재하는 전화번호
+            }
+        }
+        return false;  // 중복되지 않음
+    }
+
 
 
     // 그룹 초대 API 호출 메서드

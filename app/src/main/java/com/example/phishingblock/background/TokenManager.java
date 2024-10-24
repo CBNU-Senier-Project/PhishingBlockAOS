@@ -4,6 +4,8 @@ package com.example.phishingblock.background;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.security.AccessControlContext;
+
 public class TokenManager {
 
     private static final String SHARED_PREFS_NAME = "my_shared_prefs";
@@ -33,4 +35,5 @@ public class TokenManager {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(REFRESH_TOKEN_KEY, null);
     }
+
 }

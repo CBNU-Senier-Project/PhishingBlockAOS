@@ -53,7 +53,7 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"/>
 
     <!-- 가족 구성원 추가 버튼 (항상 화면의 우측 하단에 위치) -->
