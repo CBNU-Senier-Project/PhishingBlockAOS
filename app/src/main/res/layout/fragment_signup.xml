@@ -38,7 +38,7 @@
             android:hint="이메일"
             android:inputType="textEmailAddress"
             android:padding="16dp"
-            android:textColor="@color/button_color"
+            android:textColor="@color/gray"
             android:textColorHint="#B0B0B0" />
 
         <Button
@@ -67,7 +67,7 @@
         android:background="@drawable/stoke_et_color"
         android:inputType="textPassword"
         android:textColorHint="#B0B0B0"
-        android:textColor="@color/button_color"
+        android:textColor="@color/gray"
         android:layout_marginBottom="16dp" />
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -82,7 +82,7 @@
         android:background="@drawable/stoke_et_color"
         android:inputType="textPassword"
         android:textColorHint="#B0B0B0"
-        android:textColor="@color/button_color"
+        android:textColor="@color/gray"
         android:layout_marginBottom="16dp" />
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -96,7 +96,7 @@
         android:background="@drawable/stoke_et_color"
         android:inputType="phone"
         android:textColorHint="#B0B0B0"
-        android:textColor="@color/button_color"
+        android:textColor="@color/gray"
         android:layout_marginBottom="16dp" />
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -109,7 +109,7 @@
         android:padding="16dp"
         android:background="@drawable/stoke_et_color"
         android:textColorHint="#B0B0B0"
-        android:textColor="@color/button_color"
+        android:textColor="@color/gray"
         android:layout_marginBottom="16dp" /> <!-- Add this line for the nickname -->
 
     <Button

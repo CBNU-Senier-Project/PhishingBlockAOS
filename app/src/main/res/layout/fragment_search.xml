@@ -24,7 +24,7 @@
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:padding="16dp"
-            android:textColor="@color/button_color"
+            android:textColor="@color/gray"
             android:textColorHint="#B0B0B0" />
 
         <RadioGroup

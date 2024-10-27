@@ -13,6 +13,7 @@ import com.example.phishingblock.network.payload.InviteMemberRequest;
 import com.example.phishingblock.network.payload.LoginRequest;
 import com.example.phishingblock.network.payload.LoginResponse;
 import com.example.phishingblock.network.payload.NewsResponse;
+import com.example.phishingblock.network.payload.NicknameRequest;
 import com.example.phishingblock.network.payload.PredictionResponse;
 import com.example.phishingblock.network.payload.ReportItemResponse;
 import com.example.phishingblock.network.payload.SearchPhishingDataRequest;
@@ -148,5 +149,13 @@ public interface ApiService {
     //크롤링
     @GET("user/api/v1/news/view")
     Call<List<NewsResponse>> getNews(@Header("Authorization") String token);
+
+    @PATCH("/user/api/v1/groups/{groupId}/members/{memberId}/nickname")
+    Call<Void> updateGroupMemberNickname(
+            @Header("Authorization") String authorization,
+            @Path("groupId") long groupId,
+            @Path("memberId") long memberId,
+            @Body NicknameRequest nicknameRequest
+    );
 }
 

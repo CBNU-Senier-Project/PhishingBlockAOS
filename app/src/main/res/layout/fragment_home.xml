@@ -47,6 +47,7 @@
 
             <!-- 최근 신고된 번호 섹션 -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/recent_number_card"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
@@ -131,6 +132,7 @@
 
             <!-- 최근 신고된 URL 섹션 -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/recent_url_card"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
@@ -213,6 +215,7 @@
 
             <!-- 최근 신고된 계좌 섹션 -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/recent_account_card"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
@@ -296,12 +299,21 @@
     </HorizontalScrollView>
 
 
-
+    <!-- 뉴스 기사 제목들이 표시될 컨테이너 -->
+    <TextView
+        android:id="@+id/tv_news_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="275dp"
+        android:text="관련 뉴스"
+        android:textSize="25dp"
+        android:textStyle="bold" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="300dp"
-        android:layout_marginBottom="100dp"
         android:paddingLeft="16dp"
         android:paddingTop="20dp">
 
@@ -321,15 +333,6 @@
                 android:layout_marginBottom="24dp"
                 android:visibility="gone" />
 
-            <!-- 뉴스 기사 제목들이 표시될 컨테이너 -->
-            <TextView
-                android:id="@+id/tv_news_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="관련 뉴스"
-                android:textSize="25dp"
-                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/news_container"
@@ -337,8 +340,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="8dp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="120dp"/>
 
         </LinearLayout>
+
 
     </ScrollView>
 

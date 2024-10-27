@@ -36,7 +36,7 @@
     android:background="@color/white"
         android:inputType="textEmailAddress"
     android:textColorHint="#B0B0B0"
-    android:textColor="@color/button_color"
+        android:textColor="@color/gray"
 />
 </FrameLayout>
 
@@ -59,7 +59,7 @@
         android:background="@color/white"
         android:inputType="textPassword"
         android:textColorHint="#B0B0B0"
-        android:textColor="@color/button_color" />
+        android:textColor="@color/gray"/>
     </FrameLayout>
     <Button
         android:id="@+id/btn_login"

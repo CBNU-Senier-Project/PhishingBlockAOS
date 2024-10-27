@@ -64,10 +64,15 @@ public class SearchFragment extends Fragment {
         // RadioGroup to choose reportType (ACCOUNT, URL, PHONE)
         RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
 
-        // Set default type to ACCOUNT
-        radioGroup.check(R.id.radioButton);
+        // Default to PHONE, but override with bundle data if present
+        if (getArguments() != null) {
+            String receivedType = getArguments().getString("search_type", "PHONE");
+            setReportTypeAndRadioButton(receivedType, radioGroup);
+        } else {
+            setReportTypeAndRadioButton("PHONE", radioGroup);
+        }
 
-        // Load initial data based on default type
+        // Load initial data based on default or passed type
         loadReportItemsByType(reportType);
 
         // Handle radio button selection changes
@@ -97,6 +102,18 @@ public class SearchFragment extends Fragment {
             }
             return false;
         });
+    }
+
+    // Helper method to set the report type and check the correct radio button
+    private void setReportTypeAndRadioButton(String type, RadioGroup radioGroup) {
+        reportType = type;
+        if ("PHONE".equals(type)) {
+            radioGroup.check(R.id.radioButton);
+        } else if ("URL".equals(type)) {
+            radioGroup.check(R.id.radioButton2);
+        } else if ("ACCOUNT".equals(type)) {
+            radioGroup.check(R.id.radioButton3);
+        }
     }
 
     // Method to load data by type (when radio button is clicked)

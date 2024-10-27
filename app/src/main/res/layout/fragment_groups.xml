@@ -22,9 +22,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="그룹"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:textColor="@color/primaryColor"
             android:gravity="start" />
 
         <Button
@@ -32,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="초대 리스트 보기"
+            android:textColor="@color/gray"
             android:layout_gravity="end"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
@@ -72,7 +73,7 @@
         />
 
     <!-- 가족 구성원 추가 버튼 (항상 화면의 우측 하단에 위치) -->
-    <Button
+    <FrameLayout
         android:id="@+id/btnAddMember"
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -81,8 +82,15 @@
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="120dp"
         android:background="@drawable/button_circle"
-        android:text="+"
-        android:textStyle="bold"
-        android:textSize="20dp"
-        android:textColor="@color/button_color"/>
+        android:elevation="8dp">
+
+        <!-- 중앙에 배치될 아이콘 -->
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_add"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+
 </RelativeLayout>

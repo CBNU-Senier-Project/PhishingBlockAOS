@@ -46,7 +46,7 @@ public class SettingFragment extends Fragment {
         // 사용자 정보 API 호출
         loadUserProfile();
 
-        // 프로필 변경 버튼 클릭 시 프로필 수정 프래그먼트로 이동
+// 프로필 변경 버튼 클릭 시 프로필 수정 프래그먼트로 이동
         buttonChangeProfile.setOnClickListener(v -> {
             // Fragment 전환 코드
             FragmentManager fragmentManager = getParentFragmentManager();
@@ -54,6 +54,11 @@ public class SettingFragment extends Fragment {
                     .replace(R.id.fragment_container, new ProfileEditFragment()) // ProfileEditFragment로 전환
                     .addToBackStack(null)
                     .commit();
+
+            // 네비게이션 바 숨기기
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).hideBottomNavigation();
+            }
         });
 
         // 로그아웃 버튼 클릭 시 처리
@@ -62,7 +67,7 @@ public class SettingFragment extends Fragment {
         });
         // 회원탈퇴 버튼 클릭시
         buttonResign.setOnClickListener(v -> {
-            logout();
+            resign();
         });
 
         return view;

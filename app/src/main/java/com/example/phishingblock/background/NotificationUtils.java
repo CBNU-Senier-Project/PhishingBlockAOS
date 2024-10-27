@@ -1,4 +1,4 @@
-package com.example.phishingblock;
+package com.example.phishingblock.background;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

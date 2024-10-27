@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         // 저장된 토큰 확인
         String token = TokenManager.getAccessToken(this);
@@ -80,9 +79,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // 네비게이션 바 숨기기
+    public void hideBottomNavigation() {
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setVisibility(View.GONE);
+        }
+    }
+
+    // 네비게이션 바 보이기
+    public void showBottomNavigation() {
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }
+    }
+
     private boolean isTokenValid(String token) {
         // JWT 토큰 만료 확인 로직 추가 가능 (여기서는 간단한 예시로 대체)
         return token.length() > 10; // 예시로 길이 체크, 실제로는 만료 날짜를 확인
+    }
+
+    public void navigateToFragment(Fragment fragment, int menuItemId) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
+
+        // BottomNavigationView 상태 업데이트
+        bottomNavigationView.setSelectedItemId(menuItemId);
     }
 
     private Fragment getFragmentForMenuItem(MenuItem item) {

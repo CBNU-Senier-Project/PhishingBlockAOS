@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
 import com.example.phishingblock.network.payload.GroupMemberResponse;
 import com.example.phishingblock.network.payload.InviteMemberRequest;
+import com.example.phishingblock.network.payload.NicknameRequest;
 import com.example.phishingblock.network.payload.UserProfileResponse;
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public class GroupsFragment extends Fragment {
     private RecyclerView recyclerView;
     private GroupMemberAdapter adapter;
     private LinearLayout emptyStateLayout;
+    private FrameLayout btnAddMember; // 변경된 부분
     private Button btnViewInviteList;
     private List<GroupMemberResponse> groupMemberResponseList = new ArrayList<>();
     private long groupId = -1;  // 그룹 ID를 저장할 전역 변수
@@ -56,8 +59,9 @@ public class GroupsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_groups, container, false);
         recyclerView = view.findViewById(R.id.recyclerViewGroupMembers);
         emptyStateLayout = view.findViewById(R.id.emptyStateLayout);
-        Button btnAddMember = view.findViewById(R.id.btnAddMember);
+        btnAddMember = view.findViewById(R.id.btnAddMember); // FrameLayout 참조로 변경
         btnViewInviteList = view.findViewById(R.id.btn_view_invite_list);
+
         // GridLayoutManager로 설정 (한 줄에 2개 아이템)
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
@@ -73,7 +77,7 @@ public class GroupsFragment extends Fragment {
                 userId = userProfile.getUserId();
                 UserphoneNumber = userProfile.getUserInfo().getPhnum();
 
-                // 그룹 ID를 로드하고 나서 나머지 작업을 실행
+                // 그룹 ID를 로드하고 나머지 작업을 실행
                 loadGroupId(userId, token, new GroupIdLoadCallback() {
                     @Override
                     public void onGroupIdLoaded(long groupId) {
@@ -90,7 +94,7 @@ public class GroupsFragment extends Fragment {
         });
 
         // 그룹원 추가 버튼 클릭 시
-        btnAddMember.setOnClickListener(v -> {
+        btnAddMember.setOnClickListener(v -> { // 변경된 부분
             if (groupId != -1) {
                 showInviteMemberDialog();
             } else {
@@ -256,9 +260,64 @@ public class GroupsFragment extends Fragment {
             adapter = new GroupMemberAdapter(groupMemberResponseList, getContext(), memberId -> {
                 // 멤버 삭제 로직 처리
                 deleteGroupMember(memberId);
+            }, (memberId, currentName) -> {
+                // 닉네임 수정 다이얼로그 표시
+                showEditNicknameDialog(memberId, currentName);
             });
             recyclerView.setAdapter(adapter);
         }
+    }
+
+    // 닉네임 수정 다이얼로그
+    private void showEditNicknameDialog(long memberId, String currentName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_edit_nickname, null);
+        builder.setView(dialogView);
+
+        EditText editTextNewNickname = dialogView.findViewById(R.id.editTextNewNickname);
+        editTextNewNickname.setText(currentName);
+        Button buttonSave = dialogView.findViewById(R.id.buttonSave);
+        Button buttonCancel = dialogView.findViewById(R.id.buttonCancel);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        buttonCancel.setOnClickListener(v -> dialog.dismiss());
+
+        buttonSave.setOnClickListener(v -> {
+            String newNickname = editTextNewNickname.getText().toString().trim();
+            if (!newNickname.isEmpty()) {
+                updateMemberNickname(memberId, newNickname);
+                dialog.dismiss();
+            } else {
+                editTextNewNickname.setError("닉네임을 입력하세요.");
+            }
+        });
+    }
+
+    // 닉네임 변경 API 호출
+    private void updateMemberNickname(long memberId, String newNickname) {
+        ApiService apiService = RetrofitClient.getApiService();
+        String token = TokenManager.getAccessToken(getContext());
+        NicknameRequest nicknameRequest = new NicknameRequest(newNickname);
+
+        Call<Void> call = apiService.updateGroupMemberNickname(token, groupId, memberId, nicknameRequest);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "닉네임이 성공적으로 수정되었습니다.", Toast.LENGTH_SHORT).show();
+                    loadGroupMembers(); // 목록 새로고침
+                } else {
+                    Toast.makeText(getContext(), "닉네임 수정 실패.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(getContext(), "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // 빈 상태 표시
