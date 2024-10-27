@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
     <!-- Custom font 적용 -->
     <style name="customTextViewFontStyle" parent="@android:style/Widget.DeviceDefault.TextView">
         <item name="android:fontFamily">@font/bmjua_ttf</item>
@@ -21,5 +22,10 @@
     <style name="customCheckboxFontStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
         <item name="android:fontFamily">@font/bmjua_ttf</item>
     </style>
+
+    <style name="customSwitchFontStyle" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:fontFamily">@font/bmjua_ttf</item>
+    </style>
+
 
 </resources>

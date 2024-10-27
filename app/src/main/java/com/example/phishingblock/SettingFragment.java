@@ -30,6 +30,7 @@ public class SettingFragment extends Fragment {
     private TextView textViewProfilePhone;
     private Button buttonChangeProfile;
     private Button buttonLogout;
+    private Button buttonResign;
 
     @Nullable
     @Override
@@ -41,7 +42,7 @@ public class SettingFragment extends Fragment {
         textViewProfilePhone = view.findViewById(R.id.textview_profile_phone);
         buttonChangeProfile = view.findViewById(R.id.button_change_profile);
         buttonLogout = view.findViewById(R.id.button_logout);
-
+        buttonResign = view.findViewById(R.id.button_resign);
         // 사용자 정보 API 호출
         loadUserProfile();
 
@@ -57,6 +58,10 @@ public class SettingFragment extends Fragment {
 
         // 로그아웃 버튼 클릭 시 처리
         buttonLogout.setOnClickListener(v -> {
+            logout();
+        });
+        // 회원탈퇴 버튼 클릭시
+        buttonResign.setOnClickListener(v -> {
             logout();
         });
 
@@ -100,9 +105,10 @@ public class SettingFragment extends Fragment {
     // 로그아웃 처리
     private void logout() {
         ApiService apiService = RetrofitClient.getApiService();
-        String token = TokenManager.getAccessToken(getContext());
+        String atoken = TokenManager.getAccessToken(getContext());
+        String rtoken = TokenManager.getRefreshToken(getContext());
 
-        Call<Void> call = apiService.logout(token); // 로그아웃 API 호출
+        Call<Void> call = apiService.logout(atoken,rtoken); // 로그아웃 API 호출
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -115,6 +121,34 @@ public class SettingFragment extends Fragment {
                 } else {
                     // 로그아웃 실패 처리
                     Toast.makeText(getContext(), "로그아웃 실패", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // 네트워크 오류 또는 서버 오류 처리
+                Toast.makeText(getContext(), "오류 발생: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // 회원 탈퇴 처리
+    private void resign() {
+        ApiService apiService = RetrofitClient.getApiService();
+        String token = TokenManager.getAccessToken(getContext());
+        Call<Void> call = apiService.resign(token); // 회원탈퇴 API 호출
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // 회원 탈퇴 성공 시 로그인 화면으로 이동
+                    Intent intent = new Intent(getActivity(), LoginFragment.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    getActivity().finish();  // 현재 액티비티 종료
+                } else {
+                    // 회원탈퇴 실패 처리
+                    Toast.makeText(getContext(), "회원탈퇴 실패", Toast.LENGTH_SHORT).show();
                 }
             }
 

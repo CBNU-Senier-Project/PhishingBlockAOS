@@ -12,6 +12,7 @@ import com.example.phishingblock.network.payload.InvitationResponse;
 import com.example.phishingblock.network.payload.InviteMemberRequest;
 import com.example.phishingblock.network.payload.LoginRequest;
 import com.example.phishingblock.network.payload.LoginResponse;
+import com.example.phishingblock.network.payload.NewsResponse;
 import com.example.phishingblock.network.payload.PredictionResponse;
 import com.example.phishingblock.network.payload.ReportItemResponse;
 import com.example.phishingblock.network.payload.SearchPhishingDataRequest;
@@ -49,7 +50,12 @@ public interface ApiService {
     // 로그아웃 API
     @POST("/user/api/v1/auth/signout")
     Call<Void> logout(
-            @Header("Authorization") String accessToken   // AccessToken 헤더
+            @Header("Authorization") String accessToken,@Header("RefreshToken") String refreshToken   // AccessToken 헤더
+    );
+
+    @POST("/user/api/v1/user/resign")
+    Call<Void> resign(
+            @Header("Authorization") String accessToken
     );
 
     // 그룹 생성 API
@@ -112,8 +118,11 @@ public interface ApiService {
     Call<List<Long>> getGroupIds(@Header("Authorization") String token,@Path("creatorId") long creatorId);
 
     // 그룹 멤버 조회 API
-    @GET("/user/api/v1/groups/group/members")
-    Call<List<GroupMemberResponse>> getGroupMembers(@Header("Authorization") String token);
+    @GET("/user/api/v1/groups/group/{groupId}/members")
+    Call<List<GroupMemberResponse>> getGroupMembers(
+            @Header("Authorization") String token,
+            @Path("groupId") long groupId
+    );
 
     // 그룹 멤버 삭제 API
     @DELETE("/user/api/v1/groups/{groupId}/members/{memberId}")
@@ -136,5 +145,8 @@ public interface ApiService {
             @Body CallDialogueRequest callDialogueRequset
     );
 
+    //크롤링
+    @GET("user/api/v1/news/view")
+    Call<List<NewsResponse>> getNews(@Header("Authorization") String token);
 }
 

@@ -6,6 +6,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.phishingblock.MainActivity;
 import com.example.phishingblock.R;
 
 public class SplashActivity extends AppCompatActivity {
@@ -20,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // MainActivity로 이동
-                Intent intent = new Intent(SplashActivity.this, LoginFragment.class);
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();  // SplashActivity 종료
             }

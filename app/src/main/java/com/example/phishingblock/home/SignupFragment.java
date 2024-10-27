@@ -180,7 +180,7 @@ public class SignupFragment extends AppCompatActivity {
         ApiService apiService = RetrofitClient.getApiService();
         GroupRequest groupRequest = new GroupRequest("New User Group"); // 기본 그룹 이름
 
-        Call<Void> call = apiService.createGroup("Bearer " + token, groupRequest);
+        Call<Void> call = apiService.createGroup( token, groupRequest);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

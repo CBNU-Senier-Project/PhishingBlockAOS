@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
 
     <application
@@ -25,6 +26,9 @@
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
 
+        <service android:name=".background.OverlayService"
+            android:permission="android.permission.SYSTEM_ALERT_WINDOW"/>
+
         <activity
             android:name=".home.SplashActivity"
             android:exported="true">
@@ -33,8 +37,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".home.LoginFragment" />
+
         <activity android:name=".MainActivity" />
+        <activity android:name=".home.LoginFragment" />
         <activity android:name=".home.SignupFragment" />
 
         <receiver

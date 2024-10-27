@@ -12,6 +12,7 @@
         <item name="android:editTextStyle">@style/customEditTextFontStyle</item>
         <item name="android:radioButtonStyle">@style/customRadioButtonFontStyle</item>
         <item name="android:checkboxStyle">@style/customCheckboxFontStyle</item>
+        <item name="android:switchStyle">@style/customSwitchFontStyle</item>
     </style>
 
     <style name="Theme.PhishingBlock" parent="Base.Theme.PhishingBlock" />

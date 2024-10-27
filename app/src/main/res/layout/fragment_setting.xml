@@ -16,36 +16,27 @@
         android:clipToOutline="true"
         />
 
-
-
     <!-- 겹쳐서 배치되는 콘텐츠 (ScrollView 및 다른 요소들) -->
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
         android:padding="16dp"
-        >
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="20dp">
-        >
-
-        <!-- 사용자 프로필 섹션 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:text="프로필"
-            android:textSize="16sp"
+            android:textSize="24dp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:orientation="horizontal"
-            android:layout_marginBottom="70dp">
+            android:layout_marginBottom="70dp"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -75,92 +66,226 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_primary"
                 android:text="프로필 변경"
-                android:textColor="@color/white"/>
-
+                android:textColor="@color/white" />
         </LinearLayout>
+    </LinearLayout>
 
-        <!-- 프로필 변경 버튼 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="170dp"
+        android:layout_marginBottom="16dp"
+        android:padding="16dp"
+        >
 
-        <!-- 알림 설정 스위치 -->
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="알림 설정"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:orientation="vertical"
+            android:paddingTop="20dp">
 
-        <Switch
-            android:id="@+id/switch_notifications"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginBottom="8dp"
-            android:text="알림 활성화" />
+            <!-- 사용자 프로필 섹션 -->
+
+            <!-- 알림 설정 스위치 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="알림 설정"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="end"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="알람 활성화"
+                    android:textColor="@color/gray"
+                    android:layout_marginEnd="8dp" /> <!-- 텍스트와 스위치 사이의 여백 -->
+
+                <Switch
+                    style="@style/customSwitchFontStyle"
+                    android:id="@+id/switch_alarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:track="@drawable/switch_track_selector"
+                    android:thumb="@drawable/switch_thumb"
+                    android:switchMinWidth="0dp"
+                    android:textOff=""
+                    android:textOn=""
+                    android:thumbTextPadding="15dp" />
+            </LinearLayout>
+
+
             <!-- 회색 가로선 추가 -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#E0E0E0" />
 
-        <!-- 다크 모드 설정 스위치 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="다크 모드"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp" />
+            <!-- 다크 모드 설정 스위치 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="다크 모드"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
 
-            <Switch
-            android:id="@+id/switch_dark_mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginBottom="8dp"
-            android:text="다크 모드 활성화" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="end"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="다크 모드 활성화"
+                    android:textColor="@color/gray"
+                    android:layout_marginEnd="8dp" /> <!-- 텍스트와 스위치 사이의 여백 -->
+
+                <Switch
+                    style="@style/customSwitchFontStyle"
+                    android:id="@+id/switch_dark_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:track="@drawable/switch_track_selector"
+                    android:thumb="@drawable/switch_thumb"
+                    android:switchMinWidth="0dp"
+                    android:textOff=""
+                    android:textOn=""
+                    android:thumbTextPadding="15dp" />
+            </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#E0E0E0" />
 
-        <!-- 로그아웃 버튼 -->
+
+
+            <!-- 고객 지원 섹션 추가 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="고객 지원"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
+
             <Button
-            android:id="@+id/button_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="로그아웃"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
+                android:id="@+id/button_support"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="고객 지원 문의"
+                android:layout_marginBottom="8dp"
                 android:textSize="16dp"
                 android:textColor="@color/gray"
-                android:textStyle="bold"
-                android:background="@android:color/transparent"/>
+                android:background="@drawable/ripple_effect" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#E0E0E0" />
 
-        <!-- 앱 버전 정보 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="앱 버전"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp" />
+            <!-- 피드백 섹션 추가 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="피드백"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:id="@+id/textview_app_version"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1.0.0" />
+            <Button
+                android:id="@+id/button_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="피드백 보내기"
+                android:layout_marginBottom="8dp"
+                android:textSize="16dp"
+                android:textColor="@color/gray"
+                android:background="@drawable/ripple_effect" />
 
-    </LinearLayout>
-</ScrollView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0" />
 
-    </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="계정"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
+            <!-- 로그아웃 버튼 -->
+            <Button
+                android:id="@+id/button_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="로그아웃"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="16dp"
+                android:textColor="@color/gray"
+                android:background="@drawable/ripple_effect"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0" />
+
+            <Button
+                android:id="@+id/button_resign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="회원 탈퇴"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="16dp"
+                android:textColor="@color/gray"
+                android:background="@drawable/ripple_effect" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0" />
+
+            <!-- 앱 버전 정보 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="앱 버전"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/textview_app_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="1.0.0" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="120dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

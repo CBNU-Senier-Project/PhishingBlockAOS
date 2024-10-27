@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +35,9 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.example.phishingblock.callback.ProfileLoadCallback;
+import com.example.phishingblock.callback.GroupIdLoadCallback;
+
 
 public class GroupsFragment extends Fragment {
 
@@ -44,7 +48,7 @@ public class GroupsFragment extends Fragment {
     private List<GroupMemberResponse> groupMemberResponseList = new ArrayList<>();
     private long groupId = -1;  // 그룹 ID를 저장할 전역 변수
     private long userId = 0;
-    private String UserphoneNumber="null";
+    private String UserphoneNumber = "null";
 
     @Nullable
     @Override
@@ -54,30 +58,47 @@ public class GroupsFragment extends Fragment {
         emptyStateLayout = view.findViewById(R.id.emptyStateLayout);
         Button btnAddMember = view.findViewById(R.id.btnAddMember);
         btnViewInviteList = view.findViewById(R.id.btn_view_invite_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        // GridLayoutManager로 설정 (한 줄에 2개 아이템)
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-        UserProfileResponse userProfile = UserManager.getUserProfile(getContext());
-        if (userProfile != null) {
-            userId = userProfile.getUserId();
-            String nickname = userProfile.getUserInfo().getNickname();
-            UserphoneNumber = userProfile.getUserInfo().getPhnum();
-            Toast.makeText(getContext(), "유저 닉네임: " + nickname, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getContext(), "유저 프로필을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
-        }
+        // 그리드 간격 설정 (dimens.xml에 정의된 값 사용)
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true));
+        String token = TokenManager.getAccessToken(getContext());
 
-        // 그룹원 추가 버튼 클릭 시 초대 기능 수행
-        btnAddMember.setOnClickListener(v -> {
-            String token = TokenManager.getAccessToken(getContext());
-            if (groupId == -1) {
-                // 그룹 ID가 없으면 먼저 그룹 ID를 로드한 후 초대 다이얼로그를 띄움
-                loadGroupId(userId, token);  // creatorId는 미리 설정된 값이어야 합니다
-            } else {
-                showInviteMemberDialog();
+        // 유저 프로필을 먼저 로드하고 그 다음에 그룹 ID를 가져오도록
+        loadUserProfile(token, new ProfileLoadCallback() {
+            @Override
+            public void onProfileLoaded(UserProfileResponse userProfile) {
+                userId = userProfile.getUserId();
+                UserphoneNumber = userProfile.getUserInfo().getPhnum();
+
+                // 그룹 ID를 로드하고 나서 나머지 작업을 실행
+                loadGroupId(userId, token, new GroupIdLoadCallback() {
+                    @Override
+                    public void onGroupIdLoaded(long groupId) {
+                        GroupsFragment.this.groupId = groupId; // 그룹 ID 설정
+                        loadGroupMembers(); // 그룹 멤버 조회
+                    }
+                });
+            }
+
+            @Override
+            public void onProfileLoadFailed(String errorMessage) {
+                Toast.makeText(getContext(), "유저 프로필을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // 초대 리스트 보기 버튼 클릭 시 InviteListFragment로 이동
+        // 그룹원 추가 버튼 클릭 시
+        btnAddMember.setOnClickListener(v -> {
+            if (groupId != -1) {
+                showInviteMemberDialog();
+            } else {
+                Toast.makeText(getContext(), "그룹 ID가 없습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 초대 리스트 보기 버튼 클릭 시
         btnViewInviteList.setOnClickListener(v -> {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -86,13 +107,20 @@ public class GroupsFragment extends Fragment {
             fragmentTransaction.commit();
         });
 
-        // 그룹 멤버 목록 가져오기
-        loadGroupMembers();
-
         return view;
     }
 
-    private void loadGroupId(long creatorId, String token) {
+    private void loadUserProfile(String token, ProfileLoadCallback callback) {
+        UserProfileResponse userProfile = UserManager.getUserProfile(getContext());
+
+        if (userProfile != null) {
+            callback.onProfileLoaded(userProfile);
+        } else {
+            callback.onProfileLoadFailed("유저 프로필을 불러오지 못했습니다.");
+        }
+    }
+
+    private void loadGroupId(long creatorId, String token, GroupIdLoadCallback callback) {
         ApiService apiService = RetrofitClient.getApiService();
 
         Call<List<Long>> call = apiService.getGroupIds(token, creatorId);
@@ -100,9 +128,8 @@ public class GroupsFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Long>> call, Response<List<Long>> response) {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    groupId = response.body().get(0);  // 첫 번째 그룹 ID 사용
-                    Toast.makeText(getContext(), "그룹 ID: " + groupId, Toast.LENGTH_SHORT).show();
-                    showInviteMemberDialog();  // 그룹 ID가 로드된 후 다이얼로그 띄움
+                    long groupId = response.body().get(0);  // 첫 번째 그룹 ID 사용
+                    callback.onGroupIdLoaded(groupId);
                 } else {
                     Toast.makeText(getContext(), "그룹 ID를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -171,8 +198,6 @@ public class GroupsFragment extends Fragment {
         return false;  // 중복되지 않음
     }
 
-
-
     // 그룹 초대 API 호출 메서드
     private void inviteMemberToGroup(long groupId, String phoneNumber, String token) {
         ApiService apiService = RetrofitClient.getApiService();
@@ -202,7 +227,7 @@ public class GroupsFragment extends Fragment {
         ApiService apiService = RetrofitClient.getApiService();
         String token = TokenManager.getAccessToken(getContext());
 
-        Call<List<GroupMemberResponse>> call = apiService.getGroupMembers(token);
+        Call<List<GroupMemberResponse>> call = apiService.getGroupMembers(token, groupId);
         call.enqueue(new Callback<List<GroupMemberResponse>>() {
             @Override
             public void onResponse(Call<List<GroupMemberResponse>> call, Response<List<GroupMemberResponse>> response) {

@@ -3,6 +3,8 @@ package com.example.phishingblock.background;
 import static java.security.AccessController.getContext;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -95,12 +97,21 @@ public class STTHelper {
         return now.format(formatter);
     }
 
+    private void showPhishingAlertOverlay() {
+        Intent intent = new Intent(context, OverlayService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
+    }
+
     private void makePrediction(String dialogue, String callTime) {
         ApiService apiService = RetrofitClient.getApiService();
         String token = TokenManager.getAccessToken(context);
 
         // CallDialogueRequest 객체 생성
-        CallDialogueRequest callDialogueRequest = new CallDialogueRequest(dialogue, callTime);
+        CallDialogueRequest callDialogueRequest = new CallDialogueRequest("검찰 이체 통장 대포 통장 수사 협조", callTime);
 
         // API 호출
         Call<PredictionResponse> call = apiService.predictdialogue(token, callDialogueRequest);
@@ -116,6 +127,7 @@ public class STTHelper {
                         Toast.makeText(context, "통화 결과: 정상", Toast.LENGTH_SHORT).show();
                     } else if ("voice phishing".equals(result.getPrediction())) {
                         // 보이스 피싱으로 판단될 때의 처리
+                        showPhishingAlertOverlay();
                         Toast.makeText(context, "통화 결과: 보이스 피싱 의심", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, "알 수 없는 결과: " + result, Toast.LENGTH_SHORT).show();

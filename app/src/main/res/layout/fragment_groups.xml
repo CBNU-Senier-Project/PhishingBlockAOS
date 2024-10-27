@@ -1,30 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center">
+    android:padding="16dp">
 
-    <!-- 초대 리스트 보기 버튼 -->
-    <Button
-        android:id="@+id/btn_view_invite_list"
-        android:layout_width="wrap_content"
+    <!-- 상단 바: 제목과 초대 리스트 보기 버튼을 수평으로 배치 -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="초대 리스트 보기"
-        android:layout_gravity="end"
-        android:layout_marginTop="16dp"/>
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/tvGroupsTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="그룹"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:gravity="start" />
+
+        <Button
+            android:id="@+id/btn_view_invite_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="초대 리스트 보기"
+            android:layout_gravity="end"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
 
     <!-- 안내 메시지 및 추가 버튼을 포함하는 LinearLayout -->
     <LinearLayout
         android:id="@+id/emptyStateLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_below="@id/topBar"
+        android:layout_above="@id/recyclerViewGroupMembers"
+        android:layout_marginBottom="8dp">
 
         <!-- 안내 메시지 -->
         <TextView
@@ -43,25 +63,21 @@
         android:id="@+id/recyclerViewGroupMembers"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_below="@id/topBar"
+        android:layout_above="@id/btnAddMember"
         android:layout_margin="8dp"
         android:visibility="gone"
         android:paddingBottom="200dp"
-        android:clipToPadding="false"/>
-
-    <!-- FrameLayout 추가 -->
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:clipToPadding="false"
+        />
 
     <!-- 가족 구성원 추가 버튼 (항상 화면의 우측 하단에 위치) -->
     <Button
         android:id="@+id/btnAddMember"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_gravity="end"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="120dp"
         android:background="@drawable/button_circle"
@@ -69,4 +85,4 @@
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="@color/button_color"/>
-</LinearLayout>
+</RelativeLayout>
