@@ -216,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
         getContentResolver().registerContentObserver(uri, true, audioObserver);
 
         Log.d("main", "MediaStore 감시 시작: " + uri.toString());
+        Toast.makeText(this, "녹음 파일 감시 시작", Toast.LENGTH_SHORT).show();
     }
 
     @Override

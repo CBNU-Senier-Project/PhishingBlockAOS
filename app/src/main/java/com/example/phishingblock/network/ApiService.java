@@ -15,6 +15,7 @@ import com.example.phishingblock.network.payload.LoginResponse;
 import com.example.phishingblock.network.payload.NewsResponse;
 import com.example.phishingblock.network.payload.NicknameRequest;
 import com.example.phishingblock.network.payload.PredictionResponse;
+import com.example.phishingblock.network.payload.RegisterFCMTokenRequest;
 import com.example.phishingblock.network.payload.ReportItemResponse;
 import com.example.phishingblock.network.payload.SearchPhishingDataRequest;
 import com.example.phishingblock.network.payload.SearchPhishingDataResponse;
@@ -22,6 +23,7 @@ import com.example.phishingblock.network.payload.SignUpRequest;
 import com.example.phishingblock.network.payload.UserIdResponse;
 import com.example.phishingblock.network.payload.UserProfileRequest;
 import com.example.phishingblock.network.payload.UserProfileResponse;
+import com.google.api.client.auth.oauth2.TokenRequest;
 
 import java.util.List;
 
@@ -156,6 +158,13 @@ public interface ApiService {
             @Path("groupId") long groupId,
             @Path("memberId") long memberId,
             @Body NicknameRequest nicknameRequest
+    );
+
+    // FCM 토큰 등록 API
+    @POST("/noti/api/v1/register")
+    Call<Void> registerFCMToken(
+            @Header("Authorization") String authorization,
+            @Body RegisterFCMTokenRequest request  // 요청 본문
     );
 }
 

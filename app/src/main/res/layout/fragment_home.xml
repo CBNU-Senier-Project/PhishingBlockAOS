@@ -315,7 +315,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="300dp"
         android:paddingLeft="16dp"
-        android:paddingTop="20dp">
+        android:paddingRight="16dp"
+        android:paddingTop="20dp"
+        android:scrollbars="none">
 
         <LinearLayout
 

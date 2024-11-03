@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">phishing block</string>
+    <string name="default_notification_channel_id">phishing_block_channel</string>
+
 </resources>

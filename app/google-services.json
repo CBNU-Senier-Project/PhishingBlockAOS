@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "646358008789",
+    "project_id": "phishingblockalert",
+    "storage_bucket": "phishingblockalert.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646358008789:android:64d7f73cb7a2fbee0d335c",
+        "android_client_info": {
+          "package_name": "com.example.phishingblock"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4TKMv6VnfP3TSDmkZmGs6HBICeC6E4a0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

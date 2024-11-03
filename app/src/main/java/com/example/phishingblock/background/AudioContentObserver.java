@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,7 +52,7 @@ public class AudioContentObserver extends ContentObserver {
             if (cursor != null && cursor.moveToFirst()) {
                 String fileName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
                 Log.d("AudioContentObserver", "새로운 오디오 파일 감지: " + fileName);
-
+                Toast.makeText(context, "새로운 오디오 파일 감지: " + fileName, Toast.LENGTH_LONG).show();
                 // 파일 이름이 이미 처리된 목록에 있는지 확인
                 if (!processedFiles.contains(fileName)) {
                     processedFiles.add(fileName);

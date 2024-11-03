@@ -1,26 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@android:color/holo_red_light">
+    android:background="@android:color/white">
+
+
+    <LinearLayout
+        android:paddingLeft="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/warningIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_warning" />
+        <TextView
+            android:layout_margin="16dp"
+            android:id="@+id/alertTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Phising Block"
+            android:textSize="24dp"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
 
     <TextView
         android:layout_margin="16dp"
         android:id="@+id/alertText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:text="보이스 피싱 의심 전화입니다."
-        android:textSize="24dp"
-        android:textColor="@android:color/white" />
+        android:textStyle="italic"
+        android:textSize="16dp"
+        android:textColor="@android:color/black" />
 
     <Button
         android:id="@+id/closeButton"
-        android:background="@android:color/holo_red_light"
-        android:layout_gravity="end"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:textColor="@color/white"
+        android:textColor="@color/red"
         android:text="닫기" />
 </LinearLayout>
