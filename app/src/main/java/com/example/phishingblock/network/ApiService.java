@@ -15,6 +15,7 @@ import com.example.phishingblock.network.payload.LoginResponse;
 import com.example.phishingblock.network.payload.NewsResponse;
 import com.example.phishingblock.network.payload.NicknameRequest;
 import com.example.phishingblock.network.payload.PredictionResponse;
+import com.example.phishingblock.network.payload.RecentPhishingResponse;
 import com.example.phishingblock.network.payload.RegisterFCMTokenRequest;
 import com.example.phishingblock.network.payload.ReportItemResponse;
 import com.example.phishingblock.network.payload.SearchPhishingDataRequest;
@@ -166,5 +167,9 @@ public interface ApiService {
             @Header("Authorization") String authorization,
             @Body RegisterFCMTokenRequest request  // 요청 본문
     );
+
+    //최근 신고 내역
+    @GET("/user/api/v1/phish/latest")
+    Call<List<RecentPhishingResponse>> getLatestPhishingData(@Header("Authorization") String authorization);
 }
 

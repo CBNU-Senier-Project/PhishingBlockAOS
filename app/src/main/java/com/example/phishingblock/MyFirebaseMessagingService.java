@@ -1,27 +1,25 @@
 package com.example.phishingblock;
 
-import static java.security.AccessController.getContext;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
-
 import com.example.phishingblock.background.TokenManager;
 import com.example.phishingblock.background.UserManager;
+import com.example.phishingblock.callback.GroupIdLoadCallback;
+import com.example.phishingblock.callback.ProfileLoadCallback;
 import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
+import com.example.phishingblock.network.payload.GroupMemberResponse;
 import com.example.phishingblock.network.payload.RegisterFCMTokenRequest;
 import com.example.phishingblock.network.payload.UserProfileResponse;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
 import java.util.List;
-
+import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,7 +31,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        // 서버에 새로운 토큰을 전송하여 관리
         loadGroupIdAndRegisterToken(token);
     }
 
@@ -41,18 +38,93 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        // 메시지의 알림 데이터 확인
-        if (remoteMessage.getNotification() != null) {
-            String title = remoteMessage.getNotification().getTitle();
-            String body = remoteMessage.getNotification().getBody();
-            sendNotification(title, body);
+        if (remoteMessage.getData().size() > 0) {
+            Map<String, String> data = remoteMessage.getData();
+            String targetUserId = data.get("userId");
+            String title = data.get("title");
+            String body = data.get("body");
+
+            Log.d("debug",targetUserId+body);
+
+            getNicknameFromGroup(targetUserId, nickname -> sendNotification(title, nickname + ": " + body));
         }
+    }
+
+    private void getNicknameFromGroup(String targetUserId, NicknameCallback callback) {
+        String token = TokenManager.getAccessToken(this);
+
+        loadUserProfile(token, new ProfileLoadCallback() {
+            @Override
+            public void onProfileLoaded(UserProfileResponse userProfile) {
+                long userId = userProfile.getUserId();
+
+                loadGroupId(userId, token, groupId -> loadGroupMembers(groupId, targetUserId, callback));
+            }
+
+            @Override
+            public void onProfileLoadFailed(String errorMessage) {
+                Log.e("ProfileLoad", "User profile load failed: " + errorMessage);
+                callback.onNicknameLoaded("Unknown User"); // 오류 발생 시 기본 값 반환
+            }
+        });
+    }
+
+    private void loadGroupMembers(long groupId, String targetUserId, NicknameCallback callback) {
+        ApiService apiService = RetrofitClient.getApiService();
+        String token = TokenManager.getAccessToken(this);
+
+        apiService.getGroupMembers(token, groupId).enqueue(new Callback<List<GroupMemberResponse>>() {
+            @Override
+            public void onResponse(Call<List<GroupMemberResponse>> call, Response<List<GroupMemberResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    for (GroupMemberResponse member : response.body()) {
+                        if (targetUserId.equals(String.valueOf(member.getUserId()))) {
+                            callback.onNicknameLoaded(member.getName());
+                            return;
+                        }
+                    }
+                    callback.onNicknameLoaded("알 수 없음");
+                } else {
+                    callback.onNicknameLoaded("Error Loading Nickname");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<GroupMemberResponse>> call, Throwable t) {
+                callback.onNicknameLoaded("Error Loading Nickname");
+            }
+        });
+    }
+
+    private void loadUserProfile(String token, ProfileLoadCallback callback) {
+        UserProfileResponse userProfile = UserManager.getUserProfile(this);
+        if (userProfile != null) {
+            callback.onProfileLoaded(userProfile);
+        } else {
+            callback.onProfileLoadFailed("유저 프로필을 불러오지 못했습니다.");
+        }
+    }
+
+    private void loadGroupId(long creatorId, String token, GroupIdLoadCallback callback) {
+        ApiService apiService = RetrofitClient.getApiService();
+
+        apiService.getGroupIds(token, creatorId).enqueue(new Callback<List<Long>>() {
+            @Override
+            public void onResponse(Call<List<Long>> call, Response<List<Long>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    callback.onGroupIdLoaded(response.body().get(0));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Long>> call, Throwable t) {
+                // Handle failure
+            }
+        });
     }
 
     private void loadGroupIdAndRegisterToken(String token) {
         ApiService apiService = RetrofitClient.getApiService();
-
-        // 사용자 프로필 정보 로드
         UserProfileResponse userProfile = UserManager.getUserProfile(this);
         if (userProfile == null) {
             Log.e("FCM", "User profile is not loaded.");
@@ -60,14 +132,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         long userId = userProfile.getUserId();
-        String accessToken = TokenManager.getAccessToken(this);  // 적절한 인증 토큰 가져오기
+        String accessToken = TokenManager.getAccessToken(this);
 
-        // 그룹 ID를 로드하기 위해 API 호출
         apiService.getGroupIds(accessToken, userId).enqueue(new Callback<List<Long>>() {
             @Override
             public void onResponse(Call<List<Long>> call, Response<List<Long>> response) {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    long groupId = response.body().get(0);  // 첫 번째 그룹 ID 사용
+                    long groupId = response.body().get(0);
                     registerFCMToken(userId, groupId, token);
                 } else {
                     Log.e("FCM", "Failed to load group ID");
@@ -83,18 +154,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void registerFCMToken(long userId, long groupId, String token) {
         ApiService apiService = RetrofitClient.getApiService();
-
-        // FCM 토큰 등록 요청 객체 생성
-        RegisterFCMTokenRequest tokenRequest = new RegisterFCMTokenRequest(
-                userId,
-                groupId,
-                token,
-                "ANDROID",
-                true
-        );
+        RegisterFCMTokenRequest tokenRequest = new RegisterFCMTokenRequest(userId, groupId, token, "ANDROID", true);
         String accessToken = TokenManager.getAccessToken(this);
-        // API 호출
-        apiService.registerFCMToken(accessToken,tokenRequest).enqueue(new Callback<Void>() {
+
+        apiService.registerFCMToken(accessToken, tokenRequest).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
@@ -114,25 +177,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendNotification(String title, String messageBody) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Android Oreo 이상에서는 Notification Channel이 필요
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Phishing Block Notifications";
-            String description = "Notifications for phishing call alerts";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Phishing Block Notifications", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Notifications for phishing call alerts");
             notificationManager.createNotificationChannel(channel);
         }
 
-        // 알림 빌더 생성
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notification) // 알림 아이콘 설정
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(messageBody)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
-        // 알림 표시
         notificationManager.notify(0, notificationBuilder.build());
+    }
+
+    private interface NicknameCallback {
+        void onNicknameLoaded(String nickname);
     }
 }

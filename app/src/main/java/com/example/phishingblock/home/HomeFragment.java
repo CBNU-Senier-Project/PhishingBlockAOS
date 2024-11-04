@@ -24,6 +24,7 @@ import com.example.phishingblock.background.TokenManager;
 import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
 import com.example.phishingblock.network.payload.NewsResponse;
+import com.example.phishingblock.network.payload.RecentPhishingResponse;
 import com.example.phishingblock.searching.SearchFragment;
 
 import java.util.List;
@@ -37,7 +38,8 @@ public class HomeFragment extends Fragment {
     private LinearLayout newsContainer;
     private ProgressBar loadingSpinner;
     private CardView recentNumberCard, recentUrlCard, recentAccountCard;
-
+    private TextView tvRecentReports, tvNewsTitle, tvNumberReport1, tvNumberReportDetail1, tvUrlReport1, tvUrlReportDetail1, tvAccountReport1, tvAccountReportDetail1;
+    private TextView tvNumberReport2, tvNumberReportDetail2, tvUrlReport2, tvUrlReportDetail2, tvAccountReport2, tvAccountReportDetail2;
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,12 +58,153 @@ public class HomeFragment extends Fragment {
         recentUrlCard.setOnClickListener(v -> navigateToSearchFragment("URL"));
         recentAccountCard.setOnClickListener(v -> navigateToSearchFragment("ACCOUNT"));
 
+        // View 초기화
+        tvRecentReports = view.findViewById(R.id.tv_recent_reports);
+        tvNewsTitle = view.findViewById(R.id.tv_news_title);
+
+        // 최근 신고된 번호 섹션
+        tvNumberReport1 = view.findViewById(R.id.tv_number_report_1);
+        tvNumberReportDetail1 = view.findViewById(R.id.tv_number_report_detail_1);
+        tvNumberReport2 = view.findViewById(R.id.tv_number_report_2);
+        tvNumberReportDetail2 = view.findViewById(R.id.tv_number_report_detail_2);
+
+        // 최근 신고된 URL 섹션
+        tvUrlReport1 = view.findViewById(R.id.tv_url_report_1);
+        tvUrlReportDetail1 = view.findViewById(R.id.tv_url_report_detail_1);
+        tvUrlReport2 = view.findViewById(R.id.tv_url_report_2);
+        tvUrlReportDetail2 = view.findViewById(R.id.tv_url_report_detail_2);
+
+        // 최근 신고된 계좌 섹션
+        tvAccountReport1 = view.findViewById(R.id.tv_account_report_1);
+        tvAccountReportDetail1 = view.findViewById(R.id.tv_account_report_detail_1);
+        tvAccountReport2 = view.findViewById(R.id.tv_account_report_2);
+        tvAccountReportDetail2 = view.findViewById(R.id.tv_account_report_detail_2);
+        fetchRecentReports();
 
         // 뉴스 API 호출 시작
         fetchNewsFromApi();
 
         return view;
     }
+
+    private void fetchRecentReports() {
+        ApiService apiService = RetrofitClient.getApiService();
+        String token = TokenManager.getAccessToken(getContext());
+
+        Call<List<RecentPhishingResponse>> call = apiService.getLatestPhishingData(token);
+        call.enqueue(new Callback<List<RecentPhishingResponse>>() {
+            @Override
+            public void onResponse(Call<List<RecentPhishingResponse>> call, Response<List<RecentPhishingResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<RecentPhishingResponse> reportList = response.body();
+
+                    // 각각의 섹션에서 두 개씩 항목을 보여줄 리스트
+                    int phoneCount = 0, urlCount = 0, accountCount = 0;
+
+                    for (RecentPhishingResponse report : reportList) {
+                        switch (report.getPhishingType()) {
+                            case "PHONE":
+                                if (phoneCount == 0) {
+                                    tvNumberReport1.setText(report.getValue());
+                                    tvNumberReportDetail1.setText(report.getContent());
+                                    phoneCount++;
+                                } else if (phoneCount == 1) {
+                                    tvNumberReport2.setText(report.getValue());
+                                    tvNumberReportDetail2.setText(report.getContent());
+                                    phoneCount++;
+                                }
+                                break;
+                            case "URL":
+                                if (urlCount == 0) {
+                                    tvUrlReport1.setText(report.getValue());
+                                    tvUrlReportDetail1.setText(report.getContent());
+                                    urlCount++;
+                                } else if (urlCount == 1) {
+                                    tvUrlReport2.setText(report.getValue());
+                                    tvUrlReportDetail2.setText(report.getContent());
+                                    urlCount++;
+                                }
+                                break;
+                            case "ACCOUNT":
+                                if (accountCount == 0) {
+                                    tvAccountReport1.setText(report.getValue());
+                                    tvAccountReportDetail1.setText(report.getContent());
+                                    accountCount++;
+                                } else if (accountCount == 1) {
+                                    tvAccountReport2.setText(report.getValue());
+                                    tvAccountReportDetail2.setText(report.getContent());
+                                    accountCount++;
+                                }
+                                break;
+                        }
+
+                        // 각 섹션에 두 개씩 표시되면 루프 종료
+                        if (phoneCount == 2 && urlCount == 2 && accountCount == 2) {
+                            break;
+                        }
+                    }
+
+                    // 데이터가 부족할 경우 기본 메시지 설정
+                    if (phoneCount < 2) {
+                        if (phoneCount == 0) {
+                            tvNumberReport1.setText("데이터 없음");
+                            tvNumberReportDetail1.setText("");
+                            tvNumberReport2.setText("데이터 없음");
+                            tvNumberReportDetail2.setText("");
+                        } else if (phoneCount == 1) {
+                            tvNumberReport2.setText("데이터 없음");
+                            tvNumberReportDetail2.setText("");
+                        }
+                    }
+
+                    if (urlCount < 2) {
+                        if (urlCount == 0) {
+                            tvUrlReport1.setText("데이터 없음");
+                            tvUrlReportDetail1.setText("");
+                            tvUrlReport2.setText("데이터 없음");
+                            tvUrlReportDetail2.setText("");
+                        } else if (urlCount == 1) {
+                            tvUrlReport2.setText("데이터 없음");
+                            tvUrlReportDetail2.setText("");
+                        }
+                    }
+
+                    if (accountCount < 2) {
+                        if (accountCount == 0) {
+                            tvAccountReport1.setText("데이터 없음");
+                            tvAccountReportDetail1.setText("");
+                            tvAccountReport2.setText("데이터 없음");
+                            tvAccountReportDetail2.setText("");
+                        } else if (accountCount == 1) {
+                            tvAccountReport2.setText("데이터 없음");
+                            tvAccountReportDetail2.setText("");
+                        }
+                    }
+
+                } else {
+                    // 오류 시 기본 메시지 표시
+                    tvNumberReport1.setText("데이터 없음");
+                    tvNumberReport2.setText("데이터 없음");
+                    tvUrlReport1.setText("데이터 없음");
+                    tvUrlReport2.setText("데이터 없음");
+                    tvAccountReport1.setText("데이터 없음");
+                    tvAccountReport2.setText("데이터 없음");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<RecentPhishingResponse>> call, Throwable t) {
+                // 네트워크 오류 처리
+                tvNumberReport1.setText("오류 발생");
+                tvNumberReport2.setText("오류 발생");
+                tvUrlReport1.setText("오류 발생");
+                tvUrlReport2.setText("오류 발생");
+                tvAccountReport1.setText("오류 발생");
+                tvAccountReport2.setText("오류 발생");
+            }
+        });
+    }
+
 
     private void navigateToSearchFragment(String type) {
         // SearchFragment로 이동하기 위해 프래그먼트 전환을 설정

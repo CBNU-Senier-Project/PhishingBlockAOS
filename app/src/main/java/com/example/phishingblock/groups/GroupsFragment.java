@@ -62,12 +62,7 @@ public class GroupsFragment extends Fragment {
         btnAddMember = view.findViewById(R.id.btnAddMember); // FrameLayout 참조로 변경
         btnViewInviteList = view.findViewById(R.id.btn_view_invite_list);
 
-        // GridLayoutManager로 설정 (한 줄에 2개 아이템)
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-
-        // 그리드 간격 설정 (dimens.xml에 정의된 값 사용)
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         String token = TokenManager.getAccessToken(getContext());
 
         // 유저 프로필을 먼저 로드하고 그 다음에 그룹 ID를 가져오도록

@@ -1,6 +1,7 @@
 package com.example.phishingblock;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +71,41 @@ public class SettingFragment extends Fragment {
             resign();
         });
 
+        // 고객 지원 버튼 Toast로 정보 표시
+        Button buttonSupport = view.findViewById(R.id.button_support);
+        buttonSupport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = "duawhk0508@gmail.com";
+                String phone = "010-1234-5678";
+                String address = "서울시 강남구 테헤란로 123";
+                String message = "이메일: " + email + "\n전화번호: " + phone + "\n주소: " + address;
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // 피드백 보내기 버튼 이메일 앱 열기
+        Button buttonFeedback = view.findViewById(R.id.button_feedback);
+        buttonFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("message/rfc822");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"feedback@example.com"});
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "피드백 보내기");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "여기에 피드백 내용을 작성해주세요.");
+
+                try {
+                    startActivity(Intent.createChooser(emailIntent, "이메일 앱을 선택하세요"));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(getContext(), "이메일 앱을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
+
         return view;
     }
 
@@ -107,6 +143,8 @@ public class SettingFragment extends Fragment {
         });
     }
 
+
+
     // 로그아웃 처리
     private void logout() {
         ApiService apiService = RetrofitClient.getApiService();
@@ -117,15 +155,12 @@ public class SettingFragment extends Fragment {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
+                if (true) {
                     // 로그아웃 성공 시 로그인 화면으로 이동
                     Intent intent = new Intent(getActivity(), LoginFragment.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     getActivity().finish();  // 현재 액티비티 종료
-                } else {
-                    // 로그아웃 실패 처리
-                    Toast.makeText(getContext(), "로그아웃 실패", Toast.LENGTH_SHORT).show();
                 }
             }
 
