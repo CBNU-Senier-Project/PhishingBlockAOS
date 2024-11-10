@@ -111,7 +111,7 @@ public class STTHelper {
         String token = TokenManager.getAccessToken(context);
 
         // CallDialogueRequest 객체 생성
-        CallDialogueRequest callDialogueRequest = new CallDialogueRequest("검찰 이체 통장 대포 통장 수사 협조", callTime);
+        CallDialogueRequest callDialogueRequest = new CallDialogueRequest(dialogue, callTime);
 
         // API 호출
         Call<PredictionResponse> call = apiService.predictdialogue(token, callDialogueRequest);

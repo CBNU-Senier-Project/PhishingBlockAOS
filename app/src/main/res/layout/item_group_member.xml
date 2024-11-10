@@ -23,51 +23,51 @@
             android:layout_marginEnd="24dp"
             android:background="@drawable/rounded_rectangle" />
 
-        <!-- 이름 텍스트 및 편집 버튼을 담는 수직 레이아웃 -->
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <!-- 이름 텍스트 -->
+        <TextView
+            android:id="@+id/nameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/profileImageView"
-            android:orientation="vertical">
+            android:text="이름"
+            android:textColor="@android:color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:layout_marginEnd="10dp" />
 
-            <!-- 이름 텍스트 -->
-            <TextView
-                android:id="@+id/nameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="이름"
-                android:textColor="@android:color/black"
-                android:textSize="24dp"
-                android:textStyle="bold" />
-
-
-        </LinearLayout>
-
-        <!-- 삭제 버튼 (오른쪽 상단) -->
-        <ImageView
-            android:id="@+id/deleteButton"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_delete"
-            android:contentDescription="Delete" />
-
-        <!-- 편집 버튼 (삭제 버튼 왼쪽) -->
+        <!-- 편집 버튼 (이름 텍스트 오른쪽) -->
         <ImageView
             android:id="@+id/editButton"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_centerVertical="true"
-            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@id/nameTextView"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_edit"
+            android:contentDescription="Edit" />
 
+        <!-- 전화번호 텍스트 (편집 버튼 오른쪽) -->
+        <TextView
+            android:id="@+id/phoneTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/editButton"
+            android:text="전화번호"
+            android:textColor="@android:color/black"
+            android:textSize="16dp"
+            android:layout_marginEnd="10dp" />
 
-            android:layout_toEndOf="@+id/linearLayout"
-            android:contentDescription="Edit"
-            android:src="@drawable/ic_edit" />
+        <!-- 삭제 버튼 (오른쪽 정렬) -->
+        <ImageView
+            android:id="@+id/deleteButton"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Delete" />
 
     </RelativeLayout>
 </LinearLayout>

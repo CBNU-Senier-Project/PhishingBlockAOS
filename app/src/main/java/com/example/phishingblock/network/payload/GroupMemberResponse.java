@@ -4,7 +4,7 @@ public class GroupMemberResponse {
     private long userId;
     private String name;
     private String phnum;
-
+    private String imageUrl;
     // Getter와 Setter
     public long getUserId() {
         return userId;
@@ -28,5 +28,13 @@ public class GroupMemberResponse {
 
     public void setPhnum(String phnum) {
         this.phnum = phnum;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

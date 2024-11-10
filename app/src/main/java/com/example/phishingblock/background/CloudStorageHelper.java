@@ -57,8 +57,6 @@ public class CloudStorageHelper {
             } catch (Exception e) {
                 System.err.println("File upload failed: " + file.getName());
                 e.printStackTrace();
-            } finally {
-                executorService.shutdown();
             }
         });
     }

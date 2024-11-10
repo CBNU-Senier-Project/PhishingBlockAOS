@@ -5,38 +5,13 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/imageViewProfile"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:background="@drawable/rounded_stroke"
-        android:clipToOutline="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_image"
-        />
-
-    <Button
-        android:layout_margin="10dp"
-        android:id="@+id/buttonSelectProfileImage"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="@color/white"
-        android:background="@drawable/button_primary"
-        android:text="이미지 선택" />
-
-    <EditText
-        android:id="@+id/editTextName"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawablePadding="12dp"
-        android:hint="이름 입력"
-        android:padding="16dp"
-        android:background="@drawable/bg_edit_text"
-        android:textColorHint="#B0B0B0"
-        android:textColor="@color/button_color"
-        android:layout_marginBottom="16dp" />
+      android:text="그룹원 추가"
+        android:textSize="24dp"
+        android:padding="8dp"
+    />
 
     <EditText
         android:id="@+id/editTextPhoneNumber"

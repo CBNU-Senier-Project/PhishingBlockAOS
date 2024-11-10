@@ -46,7 +46,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             Log.d("debug",targetUserId+body);
 
-            getNicknameFromGroup(targetUserId, nickname -> sendNotification(title, nickname + ": " + body));
+            getNicknameFromGroup(targetUserId, nickname -> sendNotification(title, nickname + "님에게 보이스피싱 의심 전화가 감지되었습니다."));
         }
     }
 
@@ -64,7 +64,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             @Override
             public void onProfileLoadFailed(String errorMessage) {
                 Log.e("ProfileLoad", "User profile load failed: " + errorMessage);
-                callback.onNicknameLoaded("Unknown User"); // 오류 발생 시 기본 값 반환
+                callback.onNicknameLoaded("그룹원"); // 오류 발생 시 기본 값 반환
             }
         });
     }
@@ -83,7 +83,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                             return;
                         }
                     }
-                    callback.onNicknameLoaded("알 수 없음");
+                    callback.onNicknameLoaded("그룹원");
                 } else {
                     callback.onNicknameLoaded("Error Loading Nickname");
                 }

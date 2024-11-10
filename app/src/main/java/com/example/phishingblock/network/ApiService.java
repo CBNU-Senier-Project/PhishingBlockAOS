@@ -8,6 +8,8 @@ import com.example.phishingblock.network.payload.CallDialogueRequest;
 import com.example.phishingblock.network.payload.DetailPhishingDataResponse;
 import com.example.phishingblock.network.payload.GroupMemberResponse;
 import com.example.phishingblock.network.payload.GroupRequest;
+import com.example.phishingblock.network.payload.ImageRequest;
+import com.example.phishingblock.network.payload.ImageResponse;
 import com.example.phishingblock.network.payload.InvitationResponse;
 import com.example.phishingblock.network.payload.InviteMemberRequest;
 import com.example.phishingblock.network.payload.LoginRequest;
@@ -171,5 +173,14 @@ public interface ApiService {
     //최근 신고 내역
     @GET("/user/api/v1/phish/latest")
     Call<List<RecentPhishingResponse>> getLatestPhishingData(@Header("Authorization") String authorization);
+
+    //맴버 이미지 수정
+    @PATCH("/user/api/v1/groups/{groupId}/members/{userId}/image")
+    Call<ImageResponse> updateImage(
+            @Header("Authorization") String token,
+            @Path("groupId") long groupId,
+            @Path("userId") long userId,
+            @Body ImageRequest imageRequest
+    );
 }
 

@@ -1,6 +1,9 @@
 package com.example.phishingblock.groups;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -41,8 +44,10 @@ import com.example.phishingblock.callback.ProfileLoadCallback;
 import com.example.phishingblock.callback.GroupIdLoadCallback;
 
 
-public class GroupsFragment extends Fragment {
+public class GroupsFragment extends Fragment implements GroupMemberAdapter.OnImageEditListener {
 
+    private static final int REQUEST_IMAGE_PICK = 100;
+    private GroupMemberResponse selectedMember;
     private RecyclerView recyclerView;
     private GroupMemberAdapter adapter;
     private LinearLayout emptyStateLayout;
@@ -52,6 +57,29 @@ public class GroupsFragment extends Fragment {
     private long groupId = -1;  // 그룹 ID를 저장할 전역 변수
     private long userId = 0;
     private String UserphoneNumber = "null";
+
+    @Override
+    public void onImageEditRequest(GroupMemberResponse member) {
+        selectedMember = member;
+        openGallery();
+    }
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_IMAGE_PICK);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+            if (selectedImageUri != null && selectedMember != null) {
+                // Update the adapter with the selected image URI
+                ((GroupMemberAdapter) recyclerView.getAdapter()).updateMemberImage(selectedMember, selectedImageUri);
+            }
+        }
+    }
 
     @Nullable
     @Override
@@ -64,6 +92,7 @@ public class GroupsFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         String token = TokenManager.getAccessToken(getContext());
+
 
         // 유저 프로필을 먼저 로드하고 그 다음에 그룹 ID를 가져오도록
         loadUserProfile(token, new ProfileLoadCallback() {
@@ -252,16 +281,17 @@ public class GroupsFragment extends Fragment {
         } else {
             emptyStateLayout.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-            adapter = new GroupMemberAdapter(groupMemberResponseList, getContext(), memberId -> {
+            adapter = new GroupMemberAdapter(groupMemberResponseList, getContext(), groupId, memberId -> {
                 // 멤버 삭제 로직 처리
                 deleteGroupMember(memberId);
             }, (memberId, currentName) -> {
                 // 닉네임 수정 다이얼로그 표시
                 showEditNicknameDialog(memberId, currentName);
-            });
+            }, this); // Pass 'this' as the OnImageEditListener
             recyclerView.setAdapter(adapter);
         }
     }
+
 
     // 닉네임 수정 다이얼로그
     private void showEditNicknameDialog(long memberId, String currentName) {

@@ -38,6 +38,7 @@ import retrofit2.Response;
 
 public class SearchFragment extends Fragment {
 
+    private Button ReportButton;
     private EditText etSearch;
     private RecyclerView recyclerView;
     private SearchAdapter adapter;  // SearchAdapter로 변경
@@ -53,6 +54,7 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ReportButton = view.findViewById(R.id.report_button);
         etSearch = view.findViewById(R.id.et_search);
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -89,20 +91,31 @@ public class SearchFragment extends Fragment {
             loadReportItemsByType(reportType);
         });
 
-        // Handle search functionality when the user enters a query
+// 검색 버튼
         etSearch.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH ||
                     (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
-                String query = etSearch.getText().toString().trim();
-                if (!query.isEmpty()) {
-                    hideKeyboard();  // Hide the keyboard
-                    loadReportItemsBySearch(reportType, query);  // Load data based on query and selected type
-                }
+                performSearch();  // 검색 동작 수행
                 return true;
             }
             return false;
         });
+
+// 신고 버튼
+        ReportButton.setOnClickListener(v -> {
+            performSearch();  // 검색 동작 수행
+        });
     }
+
+    // 검색 동작을 수행하는 메서드
+    private void performSearch() {
+        String query = etSearch.getText().toString().trim();
+        if (!query.isEmpty()) {
+            hideKeyboard();  // 키보드 숨기기
+            loadReportItemsBySearch(reportType, query);  // 검색어와 선택된 유형을 기반으로 데이터 로드
+        }
+    }
+
 
     // Helper method to set the report type and check the correct radio button
     private void setReportTypeAndRadioButton(String type, RadioGroup radioGroup) {
