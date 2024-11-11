@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ import com.example.phishingblock.background.TokenManager;
 import com.example.phishingblock.background.UserManager;
 import com.example.phishingblock.network.ApiService;
 import com.example.phishingblock.network.RetrofitClient;
+import com.example.phishingblock.network.payload.GroupLeaderResponse;
 import com.example.phishingblock.network.payload.GroupMemberResponse;
 import com.example.phishingblock.network.payload.InviteMemberRequest;
 import com.example.phishingblock.network.payload.NicknameRequest;
@@ -49,14 +51,19 @@ public class GroupsFragment extends Fragment implements GroupMemberAdapter.OnIma
     private static final int REQUEST_IMAGE_PICK = 100;
     private GroupMemberResponse selectedMember;
     private RecyclerView recyclerView;
+    private RecyclerView recyclerViewGroupLeaders;
     private GroupMemberAdapter adapter;
     private LinearLayout emptyStateLayout;
     private FrameLayout btnAddMember; // 변경된 부분
     private Button btnViewInviteList;
     private List<GroupMemberResponse> groupMemberResponseList = new ArrayList<>();
+    private List<GroupLeaderResponse> groupLeaderResponseList = new ArrayList<>();
+    private GroupLeaderAdapter leaderAdapter;
     private long groupId = -1;  // 그룹 ID를 저장할 전역 변수
     private long userId = 0;
     private String UserphoneNumber = "null";
+    private TextView tvGroupLeadersTitle;
+    private TextView tvGroupMembersTitle;
 
     @Override
     public void onImageEditRequest(GroupMemberResponse member) {
@@ -89,6 +96,10 @@ public class GroupsFragment extends Fragment implements GroupMemberAdapter.OnIma
         emptyStateLayout = view.findViewById(R.id.emptyStateLayout);
         btnAddMember = view.findViewById(R.id.btnAddMember); // FrameLayout 참조로 변경
         btnViewInviteList = view.findViewById(R.id.btn_view_invite_list);
+        tvGroupLeadersTitle = view.findViewById(R.id.tvGroupLeadersTitle);
+        tvGroupMembersTitle = view.findViewById(R.id.tvGroupMembersTitle);
+        recyclerViewGroupLeaders = view.findViewById(R.id.recyclerViewGroupLeaders);
+        recyclerViewGroupLeaders.setLayoutManager(new LinearLayoutManager(getContext()));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         String token = TokenManager.getAccessToken(getContext());
@@ -106,6 +117,7 @@ public class GroupsFragment extends Fragment implements GroupMemberAdapter.OnIma
                     @Override
                     public void onGroupIdLoaded(long groupId) {
                         GroupsFragment.this.groupId = groupId; // 그룹 ID 설정
+                        loadGroupLeaders(token);
                         loadGroupMembers(); // 그룹 멤버 조회
                     }
                 });
@@ -136,6 +148,42 @@ public class GroupsFragment extends Fragment implements GroupMemberAdapter.OnIma
         });
 
         return view;
+    }
+
+    // 그룹장 리스트를 불러오는 함수
+    private void loadGroupLeaders(String token) {
+        ApiService apiService = RetrofitClient.getApiService();
+        Call<List<GroupLeaderResponse>> leadersCall = apiService.getGroupLeader(token, userId);
+
+        leadersCall.enqueue(new Callback<List<GroupLeaderResponse>>() {
+            @Override
+            public void onResponse(Call<List<GroupLeaderResponse>> call, Response<List<GroupLeaderResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    groupLeaderResponseList = response.body();
+                    updateLeaderRecyclerView();
+                } else {
+
+                    Toast.makeText(getContext(), "그룹장이 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<GroupLeaderResponse>> call, Throwable t) {
+                Toast.makeText(getContext(), "그룹장 정보 로드 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // 그룹장 RecyclerView 업데이트 함수
+    private void updateLeaderRecyclerView() {
+        if (!groupLeaderResponseList.isEmpty()) {
+            recyclerViewGroupLeaders.setVisibility(View.VISIBLE);
+            leaderAdapter = new GroupLeaderAdapter(groupLeaderResponseList, getContext());
+            recyclerViewGroupLeaders.setAdapter(leaderAdapter);
+            tvGroupLeadersTitle.setVisibility(View.VISIBLE);
+        } else {
+            recyclerViewGroupLeaders.setVisibility(View.GONE);
+        }
     }
 
     private void loadUserProfile(String token, ProfileLoadCallback callback) {
@@ -272,6 +320,7 @@ public class GroupsFragment extends Fragment implements GroupMemberAdapter.OnIma
                 Toast.makeText(getContext(), "그룹 멤버를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     // RecyclerView 업데이트
@@ -281,6 +330,7 @@ public class GroupsFragment extends Fragment implements GroupMemberAdapter.OnIma
         } else {
             emptyStateLayout.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
+            tvGroupMembersTitle.setVisibility(View.VISIBLE);
             adapter = new GroupMemberAdapter(groupMemberResponseList, getContext(), groupId, memberId -> {
                 // 멤버 삭제 로직 처리
                 deleteGroupMember(memberId);

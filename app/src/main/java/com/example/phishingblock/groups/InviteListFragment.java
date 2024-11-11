@@ -47,7 +47,6 @@ public class InviteListFragment extends Fragment {
             receiverId = userProfile.getUserId();
             String nickname = userProfile.getUserInfo().getNickname();
             String phoneNumber = userProfile.getUserInfo().getPhnum();
-            Toast.makeText(getContext(), "유저 닉네임: " + nickname, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), "유저 프로필을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
         }

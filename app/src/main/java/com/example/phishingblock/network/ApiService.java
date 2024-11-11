@@ -6,6 +6,7 @@ import com.example.phishingblock.network.payload.AcceptInvitationRequest;
 import com.example.phishingblock.network.payload.AddReportItemRequest;
 import com.example.phishingblock.network.payload.CallDialogueRequest;
 import com.example.phishingblock.network.payload.DetailPhishingDataResponse;
+import com.example.phishingblock.network.payload.GroupLeaderResponse;
 import com.example.phishingblock.network.payload.GroupMemberResponse;
 import com.example.phishingblock.network.payload.GroupRequest;
 import com.example.phishingblock.network.payload.ImageRequest;
@@ -130,6 +131,13 @@ public interface ApiService {
             @Path("groupId") long groupId
     );
 
+    //그룹장 조회
+    @GET("/user/api/v1/groups/user/{userId}/group-leader")
+    Call<List<GroupLeaderResponse>> getGroupLeader(
+            @Header("Authorization") String authorizationToken,
+            @Path("userId") long userId
+    );
+
     // 그룹 멤버 삭제 API
     @DELETE("/user/api/v1/groups/{groupId}/members/{memberId}")
     Call<Void> deleteGroupMember(
@@ -182,5 +190,7 @@ public interface ApiService {
             @Path("userId") long userId,
             @Body ImageRequest imageRequest
     );
+
+
 }
 

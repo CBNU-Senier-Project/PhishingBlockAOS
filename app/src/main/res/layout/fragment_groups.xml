@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:androoid="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -44,7 +43,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_below="@id/topBar"
-        android:layout_above="@id/recyclerViewGroupMembers"
         android:layout_marginBottom="8dp">
 
         <!-- 안내 메시지 -->
@@ -56,21 +54,50 @@
             android:textSize="16sp"
             android:textColor="@android:color/darker_gray"
             android:gravity="center"
-            android:layout_marginBottom="16dp"/>
+            />
     </LinearLayout>
+    <!-- 그룹 멤버 RecyclerView -->
+    <TextView
+        android:id="@+id/tvGroupMembersTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="그룹 멤버"
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:textStyle="bold"
+        android:layout_below="@id/topBar"
+        android:layout_marginBottom="8dp"/>
 
     <!-- 가족 구성원이 있을 때만 RecyclerView를 보이게 처리 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewGroupMembers"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_below="@id/topBar"
-        android:layout_above="@id/btnAddMember"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvGroupMembersTitle"
         android:layout_margin="8dp"
         android:visibility="gone"
-        android:paddingBottom="200dp"
+        android:paddingBottom="30dp"
         android:clipToPadding="false"
         />
+    <!-- 그룹장 RecyclerView -->
+    <TextView
+        android:id="@+id/tvGroupLeadersTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="그룹장"
+        android:visibility="gone"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_below="@id/recyclerViewGroupMembers"
+        android:layout_marginBottom="8dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewGroupLeaders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvGroupLeadersTitle"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"/>
 
     <!-- 가족 구성원 추가 버튼 (항상 화면의 우측 하단에 위치) -->
     <FrameLayout

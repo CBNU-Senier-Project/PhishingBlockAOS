@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
+import android.media.MediaMetadataRetriever;
 
 public class AudioContentObserver extends ContentObserver {
 
@@ -72,6 +73,22 @@ public class AudioContentObserver extends ContentObserver {
         try {
             // Android 10 이상에서는 Uri에서 InputStream을 얻어 임시 파일로 변환
             File tempFile = createTempFileFromUri(uri, fileName);
+
+            // 오디오 파일의 길이 가져오기
+            MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
+            metadataRetriever.setDataSource(tempFile.getAbsolutePath());
+            String durationStr = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            long durationMillis = Long.parseLong(durationStr); // 길이(ms 단위)
+            metadataRetriever.release();
+
+            Log.d("AudioContentObserver", "오디오 파일 길이: " + durationMillis + " ms");
+
+            // 20초(20,000 ms) 이상인지 확인
+            if (durationMillis < 20000) {
+                Log.d("AudioContentObserver", "파일이 20초 미만이므로 STT 작업을 건너뜁니다.");
+                Toast.makeText(context, "시간이 20초 이상 되도록 녹음해주세요.", Toast.LENGTH_LONG).show();
+                return; // 파일이 20초 미만인 경우, STT 작업을 수행하지 않음
+            }
 
             // 변환된 파일 경로
             String outputWavFilePath = context.getExternalFilesDir(null) + "/converted_" + fileName + ".wav";

@@ -155,6 +155,8 @@ public class SignupFragment extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     String accessToken = response.body().getAccessToken(); // 로그인 후 받은 토큰
                     createGroupForUser(accessToken); // 그룹 생성 후 그룹 ID 로드
+                    Intent intent = new Intent(SignupFragment.this, LoginFragment.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(SignupFragment.this, "로그인 실패.", Toast.LENGTH_SHORT).show();
                 }
@@ -169,7 +171,7 @@ public class SignupFragment extends AppCompatActivity {
 
     private void createGroupForUser(String token) {
         ApiService apiService = RetrofitClient.getApiService();
-        GroupRequest groupRequest = new GroupRequest("New User Group");
+        GroupRequest groupRequest = new GroupRequest("그룹초대장");
 
         Call<Void> call = apiService.createGroup(token, groupRequest);
         call.enqueue(new Callback<Void>() {
