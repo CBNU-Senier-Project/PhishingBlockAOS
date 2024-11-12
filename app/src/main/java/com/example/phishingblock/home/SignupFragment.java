@@ -2,7 +2,9 @@ package com.example.phishingblock.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,7 +37,8 @@ public class SignupFragment extends AppCompatActivity {
     private TextView tvLogin;
     private String email, password, confirmPassword, phone, nickname;
     private boolean isEmailAvailable = false; // Variable to track email availability
-
+    private boolean isPasswordVisible1 = false;
+    private boolean isPasswordVisible2 = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +145,56 @@ public class SignupFragment extends AppCompatActivity {
             Intent intent = new Intent(SignupFragment.this, LoginFragment.class);
             startActivity(intent);
         });
+
+
+        // 비밀번호 가시성 토글 기능 추가
+        etPassword.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2; // 오른쪽 Drawable index
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (etPassword.getRight() - etPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // 비밀번호 가시성 상태 토글
+                        if (isPasswordVisible1) {
+                            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); // 비밀번호 숨기기
+                            etPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_eye, 0); // 눈 아이콘 변경
+                        } else {
+                            etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); // 비밀번호 보이기
+                            etPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_eye_off, 0); // 눈 감긴 아이콘 변경
+                        }
+                        isPasswordVisible1 = !isPasswordVisible1; // 상태 변경
+                        etPassword.setSelection(etPassword.getText().length()); // 커서 위치 설정
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        // 비밀번호 가시성 토글 기능 추가
+        etConfirmPassword.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2; // 오른쪽 Drawable index
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (etConfirmPassword.getRight() - etConfirmPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // 비밀번호 가시성 상태 토글
+                        if (isPasswordVisible2) {
+                            etConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); // 비밀번호 숨기기
+                            etConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_eye, 0); // 눈 아이콘 변경
+                        } else {
+                            etConfirmPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); // 비밀번호 보이기
+                            etConfirmPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.ic_eye_off, 0); // 눈 감긴 아이콘 변경
+                        }
+                        isPasswordVisible2 = !isPasswordVisible2; // 상태 변경
+                        etConfirmPassword.setSelection(etConfirmPassword.getText().length()); // 커서 위치 설정
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
     }
 
     private void loginAfterSignup(String email, String password) {

@@ -125,9 +125,10 @@ public class STTHelper {
                     if ("normal".equals(result.getPrediction())) {
                         // 정상적인 통화일 때의 처리
                         Toast.makeText(context, "통화 결과: 정상", Toast.LENGTH_SHORT).show();
+                        showNormalCallOverlay("일반 전화입니다.");
                     } else if ("voice phishing".equals(result.getPrediction())) {
-                        // 보이스 피싱으로 판단될 때의 처리
-                        showPhishingAlertOverlay();
+                        // 보이스 피싱으로 판단될 때의 기존 처리 방식 유지
+                        showPhishingAlertOverlay(); // 기존 코드 실행
                         Toast.makeText(context, "통화 결과: 보이스 피싱 의심", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, "알 수 없는 결과: " + result, Toast.LENGTH_SHORT).show();
@@ -146,5 +147,18 @@ public class STTHelper {
             }
         });
     }
+
+    // 일반 전화 오버레이를 위한 함수
+    private void showNormalCallOverlay(String message) {
+        Intent intent = new Intent(context, OverlayService.class);
+        intent.putExtra(OverlayService.EXTRA_MESSAGE, message); // 일반 전화 메시지를 전달
+        intent.putExtra(OverlayService.EXTRA_LAYOUT_TYPE, "normal");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
+    }
+
 
 }

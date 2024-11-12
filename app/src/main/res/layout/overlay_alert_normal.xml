@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:elevation="8dp"
+    android:background="@drawable/rounded_alter">
+
+
+    <LinearLayout
+        android:paddingLeft="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/warningIcon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:src="@drawable/app_logo" />
+        <TextView
+            android:layout_margin="16dp"
+            android:id="@+id/alertTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center"
+            android:text="Phising Block"
+            android:textSize="24dp"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_margin="16dp"
+        android:id="@+id/alertText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:text="일반 전화입니다."
+        android:textStyle="italic"
+        android:textSize="16dp"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/closeButton"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:textColor="@color/green"
+        android:background="@color/white"
+        android:text="닫기" />
+</LinearLayout>
