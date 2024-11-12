@@ -40,17 +40,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         if (remoteMessage.getData().size() > 0) {
             Map<String, String> data = remoteMessage.getData();
-            String targetUserId = data.get("userId");
+            String targetUserId = data.get("userId").trim();
+            Long targetUserIdLong = Long.parseLong(targetUserId);
+
             String title = data.get("title");
             String body = data.get("body");
 
-            Log.d("debug",targetUserId+body);
+            Log.d("debug",targetUserIdLong+body);
 
-            getNicknameFromGroup(targetUserId, nickname -> sendNotification(title, nickname + "님에게 보이스피싱 의심 전화가 감지되었습니다."));
+            getNicknameFromGroup(targetUserIdLong, nickname -> sendNotification(title, nickname + "님에게 보이스피싱 의심 전화가 감지되었습니다."));
         }
     }
 
-    private void getNicknameFromGroup(String targetUserId, NicknameCallback callback) {
+    private void getNicknameFromGroup(Long targetUserIdLong, NicknameCallback callback) {
         String token = TokenManager.getAccessToken(this);
 
         loadUserProfile(token, new ProfileLoadCallback() {
@@ -58,7 +60,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             public void onProfileLoaded(UserProfileResponse userProfile) {
                 long userId = userProfile.getUserId();
 
-                loadGroupId(userId, token, groupId -> loadGroupMembers(groupId, targetUserId, callback));
+                loadGroupId(userId, token, groupId -> loadGroupMembers(groupId, targetUserIdLong, callback));
             }
 
             @Override
@@ -69,7 +71,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         });
     }
 
-    private void loadGroupMembers(long groupId, String targetUserId, NicknameCallback callback) {
+    private void loadGroupMembers(long groupId, Long targetUserIdLong, NicknameCallback callback) {
         ApiService apiService = RetrofitClient.getApiService();
         String token = TokenManager.getAccessToken(this);
 
@@ -78,7 +80,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             public void onResponse(Call<List<GroupMemberResponse>> call, Response<List<GroupMemberResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     for (GroupMemberResponse member : response.body()) {
-                        if (targetUserId.equals(String.valueOf(member.getUserId()))) {
+                        if (targetUserIdLong.equals(member.getUserId()+1)) {
                             callback.onNicknameLoaded(member.getName());
                             return;
                         }

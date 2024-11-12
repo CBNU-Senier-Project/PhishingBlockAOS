@@ -161,9 +161,6 @@ public class GroupsFragment extends Fragment implements GroupMemberAdapter.OnIma
                 if (response.isSuccessful() && response.body() != null) {
                     groupLeaderResponseList = response.body();
                     updateLeaderRecyclerView();
-                } else {
-
-                    Toast.makeText(getContext(), "그룹장이 없습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 

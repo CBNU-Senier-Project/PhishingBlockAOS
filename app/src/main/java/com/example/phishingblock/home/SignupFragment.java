@@ -231,12 +231,9 @@ public class SignupFragment extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(SignupFragment.this, "그룹 생성 성공!", Toast.LENGTH_SHORT).show();
 
                     // 그룹 생성 후 사용자 프로필 로드 및 그룹 ID 가져오기
                     loadUserProfile(token);
-                } else {
-                    Toast.makeText(SignupFragment.this, "그룹 생성 실패.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -278,8 +275,6 @@ public class SignupFragment extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     long groupId = response.body().get(0); // 첫 번째 그룹 ID 가져오기
                     registerFCMToken(accessToken, userId, groupId); // FCM 토큰 등록
-                } else {
-                    Toast.makeText(SignupFragment.this, "그룹 ID를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -305,9 +300,7 @@ public class SignupFragment extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(SignupFragment.this, "FCM 토큰 등록 성공!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(SignupFragment.this, "FCM 토큰 등록 실패", Toast.LENGTH_SHORT).show();
+                            Log.d("FCM", "FCM 토큰 등록 성공!");
                         }
                     }
 
