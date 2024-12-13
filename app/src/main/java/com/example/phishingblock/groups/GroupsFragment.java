@@ -178,6 +178,7 @@ public class GroupsFragment extends Fragment implements GroupMemberAdapter.OnIma
             leaderAdapter = new GroupLeaderAdapter(groupLeaderResponseList, getContext());
             recyclerViewGroupLeaders.setAdapter(leaderAdapter);
             tvGroupLeadersTitle.setVisibility(View.VISIBLE);
+            emptyStateLayout.setVisibility(View.GONE);
         } else {
             recyclerViewGroupLeaders.setVisibility(View.GONE);
         }

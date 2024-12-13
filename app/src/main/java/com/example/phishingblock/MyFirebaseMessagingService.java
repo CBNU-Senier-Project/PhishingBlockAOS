@@ -80,7 +80,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             public void onResponse(Call<List<GroupMemberResponse>> call, Response<List<GroupMemberResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     for (GroupMemberResponse member : response.body()) {
-                        if (targetUserIdLong.equals(member.getUserId()+1)) {
+                        if (targetUserIdLong.equals(member.getUserId())) {
                             callback.onNicknameLoaded(member.getName());
                             return;
                         }

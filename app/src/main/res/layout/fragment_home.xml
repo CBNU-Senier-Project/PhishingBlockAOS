@@ -98,18 +98,20 @@
                     <!-- 번호와 설명 -->
                     <TextView
                         android:id="@+id/tv_number_report_1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
                         android:text="010-1234-5678"
+                        android:ellipsize="end"
                         android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/tv_number_report_detail_1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:text="스팸 신고"
+                        android:ellipsize="end"
                         android:textSize="14sp" />
 
                     <TextView
@@ -118,13 +120,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
                         android:text="010-9876-5432"
+                        android:ellipsize="end"
                         android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/tv_number_report_detail_2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
+                        android:ellipsize="end"
                         android:text="사기 신고"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -181,33 +185,37 @@
                     <!-- URL과 설명 -->
                     <TextView
                         android:id="@+id/tv_url_report_1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
                         android:text="http://example.com"
+                        android:ellipsize="end"
                         android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/tv_url_report_detail_1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:text="(피싱 사이트)"
+                        android:ellipsize="end"
                         android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tv_url_report_2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
                         android:text="http://malicious.com"
+                        android:ellipsize="end"
                         android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/tv_url_report_detail_2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
+                        android:ellipsize="end"
                         android:text="(피싱 사이트)"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -263,26 +271,29 @@
                     <!-- 계좌와 설명 -->
                     <TextView
                         android:id="@+id/tv_account_report_1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
                         android:text="123-456-789012"
+                        android:ellipsize="end"
                         android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/tv_account_report_detail_1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
+                        android:ellipsize="end"
                         android:text="(사기 계좌)"
                         android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tv_account_report_2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
                         android:text="987-654-321098"
+                        android:ellipsize="end"
                         android:textSize="16sp" />
 
                     <TextView
@@ -290,6 +301,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
+                        android:ellipsize="end"
                         android:text="(사기 계좌)"
                         android:textSize="14sp" />
                 </LinearLayout>
